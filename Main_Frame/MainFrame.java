@@ -42,15 +42,32 @@ public class MainFrame extends JFrame{
         siswaLogin.setBounds(250, 210, 400, 40);
         
         
+        ImageIcon image = new ImageIcon("Images/App_Logo.png");
+        this.setIconImage(image.getImage());
+
+        
         //Tambahin buttonnya ke Frame utama
         this.add(adminLogin);
         this.add(siswaLogin);
         this.add(bgrnd);
 
+
+        // Action Listener saat tekan tombol keduanya
+        adminLogin.addActionListener(e -> siswa());
+        siswaLogin.addActionListener(e -> admin());
+
+
         // Nampilin Framenya 
         this.setVisible(true);
 
-        ImageIcon image = new ImageIcon("Images/App_Logo.png");
-        this.setIconImage(image.getImage());
+    }
+    private void siswa(){
+        this.setVisible(false);
+        SiswaFrame frame = new SiswaFrame();
+        
+    }
+    private void admin(){
+        this.setVisible(false);
+        AdminFrame frame = new AdminFrame();
     }
 }
