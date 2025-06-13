@@ -1,4 +1,6 @@
 package Class_Java;
+import java.util.ArrayList;
+import java.util.List;
 public class Mahasiswa {
     //Atribut Mahasiswa
     private String Nama;
@@ -43,6 +45,6 @@ public class Mahasiswa {
         }
     }
     public void ubahDenda(double Denda){
-        this.Denda + Denda;
+        setDenda(getDenda() + Denda);
     }
 }
