@@ -1,8 +1,15 @@
 package Main_Frame;
+
 import java.awt.*;
 import javax.swing.*;
-public class MainFrame extends JFrame{
-    public MainFrame(){
+
+public class MainFrame extends JFrame {
+    // Atribut warna
+    private Color SOFT_BLUE = new Color(189, 221, 252);
+    private Color CADET_BLUE = new Color(159, 191, 222);
+    private Color DARK_GREYISH_BLUE = new Color(56,73,89);
+    
+    public MainFrame() {
         // Title Dari aplikasi GUI
         this.setTitle("Perpustakaan");
         // Diclose ketika memencet tanda silang
@@ -11,30 +18,13 @@ public class MainFrame extends JFrame{
         this.setSize(900,520);
         this.setLayout(null);
 
-        // Buat 2 button awal
-        JButton adminLogin = new JButton("Login sebagai Admin");
-        JButton siswaLogin = new JButton("Login sebagai Student");
-
+       // Buat 2 button awal dengan meng-assign warnanya
+        RoundButton adminLogin = new RoundButton("Login sebagai admin", CADET_BLUE, SOFT_BLUE);
+        RoundButton siswaLogin = new RoundButton("Login sebagai siswa", CADET_BLUE, SOFT_BLUE);
 
         //Buat panel untuk backround
         JPanel bgrnd = new JPanel();
-        bgrnd.setBackground(new Color(56,73,89));
-
-        //Warna button
-        adminLogin.setBackground(new Color(189, 221, 252));
-        adminLogin.setForeground(new Color(0,0,0));
-        siswaLogin.setBackground(new Color(189, 221, 252));
-        siswaLogin.setForeground(new Color(0,0,0));
-
-        // biar gak ada bordernya 
-        adminLogin.setBorderPainted(false);  // Remove border line
-        adminLogin.setFocusPainted(false);   // Remove dotted line on click
-        adminLogin.setContentAreaFilled(true); // Still fills background 
-
-        siswaLogin.setBorderPainted(false);  // Remove border line
-        siswaLogin.setFocusPainted(false);   // Remove dotted line on click
-        siswaLogin.setContentAreaFilled(true); // Still fills background 
-
+        bgrnd.setBackground(DARK_GREYISH_BLUE);
 
         // atur posisinya karena layoutnya null (x, y, width, height)
         bgrnd.setBounds(0,0,900,520);
