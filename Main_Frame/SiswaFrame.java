@@ -1,8 +1,13 @@
 package Main_Frame;
+
 import java.awt.*;
 import javax.swing.*;
-public class SiswaFrame extends JFrame{
-    public SiswaFrame(){
+
+public class SiswaFrame extends JFrame {
+    // Atribut warna
+    private Color DARK_GREYISH_BLUE = new Color(56,73,89);
+
+    public SiswaFrame() {
         // Title Dari aplikasi GUI
         this.setTitle("Siswa");
 
@@ -15,7 +20,7 @@ public class SiswaFrame extends JFrame{
 
         //Buat panel untuk backround
         JPanel bgrnd = new JPanel();
-        bgrnd.setBackground(new Color(56,73,89));
+        bgrnd.setBackground(DARK_GREYISH_BLUE);
 
 
         this.add(bgrnd);
