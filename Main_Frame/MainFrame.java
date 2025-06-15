@@ -43,8 +43,8 @@ public class MainFrame extends JFrame {
 
 
         // Action Listener saat tekan tombol keduanya
-        adminLogin.addActionListener(e -> siswa());
-        siswaLogin.addActionListener(e -> admin());
+        adminLogin.addActionListener(e -> admin());
+        siswaLogin.addActionListener(e -> siswa());
 
 
         // Nampilin Framenya 
