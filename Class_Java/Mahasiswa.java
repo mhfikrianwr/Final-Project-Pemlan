@@ -4,34 +4,42 @@ public class Mahasiswa {
     //Atribut Mahasiswa
     private String Nama;
     private String NIM;
+    private String Prodi;
     private double Denda;
-    
+
     //Constructor
-    public Mahasiswa (String Nama, String NIM){
+    public Mahasiswa (String Nama, String NIM, String Prodi) {
         this.Nama  = Nama;
         this.NIM   = NIM;
+        this.Prodi = Prodi;
         this.Denda = 0.0;
-        
     }
-    public Mahasiswa (){
-    }
+
+    public Mahasiswa(){} // Default constructor
+
     //Method
-    public void setNama(String Nama){
+    public void Set_Nama(String Nama) {
         this.Nama = Nama;
     }
-    public void setNIM(String NIM){
+    public void Set_NIM(String NIM) {
         this.NIM = NIM;
     }
-    public void setDenda(double Denda){
+    public void Set_Denda(double Denda) {
         this.Denda = Denda;
     }
-    public String getNama(){
+    public void Set_Prodi(String Prodi) {
+        this.Prodi = Prodi;
+    }
+    public String Get_Nama() {
         return Nama;
     }
-    public String getNIM(){
-        return NIM;
+    public String Get_NIM() {
+        return NIM; 
     }
-    public double getDenda(){
+    public double Get_Denda() {
         return Denda;
+    }
+    public String Get_Prodi() {
+        return Prodi;
     }
 }

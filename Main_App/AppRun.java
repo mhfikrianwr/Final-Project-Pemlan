@@ -1,7 +1,10 @@
 package Main_App;
-import Main_Frame.*;
+
+import Main_Frame.MainFrame;
+import java.awt.EventQueue;
+
 public class AppRun {
     public static void main(String[] args){
-        MainFrame frame = new MainFrame();
+        EventQueue.invokeLater(MainFrame :: new);
     }
 }

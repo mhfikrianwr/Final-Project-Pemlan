@@ -8,93 +8,93 @@ import java.util.StringJoiner;
 
 public class Perpustakaan {
     // Atribut
-    private List<Buku> daftar_buku;
-    private List<Mahasiswa> daftar_mahasiswa;
-    private Map<Mahasiswa, List<Buku>> daftar_mahasiswa_sedang_meminjam;
-    private Map<Mahasiswa, List<Buku>> daftar_mahasiswa_pernah_meminjam;
+    private List<Buku> Daftar_Buku;
+    private List<Mahasiswa> Daftar_Mahasiswa;
+    private Map<Mahasiswa, List<Buku>> Daftar_Mahasiswa_Sedang_Meminjam;
+    private Map<Mahasiswa, List<Buku>> Daftar_Mahasiswa_Pernah_Meminjam;
 
     // Constructor
     public Perpustakaan() {
-        this.daftar_buku = new ArrayList<>();
-        this.daftar_mahasiswa = new ArrayList<>();
-        this.daftar_mahasiswa_sedang_meminjam = new HashMap<>();
-        this.daftar_mahasiswa_pernah_meminjam = new HashMap<>();
+        this.Daftar_Buku = new ArrayList<>();
+        this.Daftar_Mahasiswa = new ArrayList<>();
+        this.Daftar_Mahasiswa_Sedang_Meminjam = new HashMap<>();
+        this.Daftar_Mahasiswa_Pernah_Meminjam = new HashMap<>();
     }
 
     // Method
-    public void tambah_buku(Buku buku) {
-        if(!daftar_buku.contains(buku)) {
-            daftar_buku.add(buku);
-            System.out.println("Buku '" + buku.getJudul() + "' telah ditambahkan ke perpustakaan.");
+    public void Tambah_Buku(Buku Buku) {
+        if(!Daftar_Buku.contains(Buku)) {
+            Daftar_Buku.add(Buku);
+            System.out.println("Buku '" + Buku.Get_Judul() + "' telah ditambahkan ke perpustakaan.");
         }
 
-        System.out.println("Buku '" + buku.getJudul() + "' sudah ada di perpustakaan.");
+        System.out.println("Buku '" + Buku.Get_Judul() + "' sudah ada di perpustakaan.");
     }
 
-    public void tampilkan_daftar_buku() {
+    public void Tampilkan_Daftar_Buku() {
         System.out.println("Daftar Buku di Perpustakaan:");
-        for (Buku buku : daftar_buku) {
-            if (buku.getStatus())
-                System.out.println("- " + buku.getJudul() + " (Kode: " + buku.getKodeBuku() + ")");
+        for (Buku Buku : Daftar_Buku) {
+            if (Buku.Get_Status())
+                System.out.println("- " + Buku.Get_Judul() + " (Kode: " + Buku.Get_Kode_Buku() + ")");
         }
     }
 
-    public void pinjam_buku(Mahasiswa mahasiswa, String kodeBuku) {
-        for (Buku buku : daftar_buku) {
-            if (buku.getKodeBuku().equals(kodeBuku) && buku.getStatus()) {
-                buku.setStatus(false);
-                buku.setNimPeminjam(mahasiswa.getNIM());
+    public void Pinjam_Buku(Mahasiswa Mahasiswa, String Kode_Buku) {
+        for (Buku Buku : Daftar_Buku) {
+            if (Buku.Get_Kode_Buku().equals(Kode_Buku) && Buku.Get_Status()) {
+                Buku.Set_Status(false);
+                Buku.Set_NIM_Peminjam(Mahasiswa.Get_NIM());
 
-                daftar_mahasiswa_sedang_meminjam.putIfAbsent(mahasiswa, new ArrayList<>());
-                daftar_mahasiswa_sedang_meminjam.get(mahasiswa).add(buku);
+                Daftar_Mahasiswa_Sedang_Meminjam.putIfAbsent(Mahasiswa, new ArrayList<>());
+                Daftar_Mahasiswa_Sedang_Meminjam.get(Mahasiswa).add(Buku);
 
-                System.out.println(mahasiswa.getNama() + " telah meminjam buku '" + buku.getJudul() + "'.");
+                System.out.println(Mahasiswa.Get_Nama() + " telah meminjam Buku '" + Buku.Get_Judul() + "'.");
                 return;
             }
         }
-        System.out.println("Buku dengan kode " + kodeBuku + " tidak tersedia.");
+        System.out.println("Buku dengan kode " + Kode_Buku + " tidak tersedia.");
     }
 
-    public void kembalikan_buku(Mahasiswa mahasiswa, String kodeBuku) {
-        for (Buku buku : daftar_buku) {
-            if (buku.getKodeBuku().equals(kodeBuku) && 
-                !buku.getStatus() && 
-                buku.getNimPeminjam().equals(mahasiswa.getNIM()) && 
-                daftar_mahasiswa_sedang_meminjam.containsKey(mahasiswa)) {
+    public void Kembalikan_Buku(Mahasiswa Mahasiswa, String Kode_Buku) {
+        for (Buku Buku : Daftar_Buku) {
+            if (Buku.Get_Kode_Buku().equals(Kode_Buku) && 
+                !Buku.Get_Status() && 
+                Buku.Get_NIM_Peminjam().equals(Mahasiswa.Get_NIM()) && 
+                Daftar_Mahasiswa_Sedang_Meminjam.containsKey(Mahasiswa)) {
                 
-                buku.setStatus(true);
-                buku.setNimPeminjam(null);
+                Buku.Set_Status(true);
+                Buku.Set_NIM_Peminjam(null);
 
-                daftar_mahasiswa_pernah_meminjam.putIfAbsent(mahasiswa, new ArrayList<>());
-                daftar_mahasiswa_pernah_meminjam.get(mahasiswa).add(buku);
+                Daftar_Mahasiswa_Pernah_Meminjam.putIfAbsent(Mahasiswa, new ArrayList<>());
+                Daftar_Mahasiswa_Pernah_Meminjam.get(Mahasiswa).add(Buku);
 
-                daftar_mahasiswa_sedang_meminjam.get(mahasiswa).remove(buku);
-                System.out.println(mahasiswa.getNama() + " telah mengembalikan buku '" + buku.getJudul() + "'.");
+                Daftar_Mahasiswa_Sedang_Meminjam.get(Mahasiswa).remove(Buku);
+                System.out.println(Mahasiswa.Get_Nama() + " telah mengembalikan Buku '" + Buku.Get_Judul() + "'.");
                 return;
             }
         }
-        System.out.println("Buku dengan kode " + kodeBuku + " tidak ditemukan dalam daftar peminjaman " + mahasiswa.getNama() + ".");
+        System.out.println("Buku dengan kode " + Kode_Buku + " tidak ditemukan dalam daftar peminjaman " + Mahasiswa.Get_Nama() + ".");
     }
 
-    public void tambah_mahasiswa(Mahasiswa mahasiswa) {
-        if(daftar_mahasiswa.contains(mahasiswa)) {
-            daftar_mahasiswa.add(mahasiswa);
-            System.out.println("Mahasiswa '" + mahasiswa.getNama() + "' telah ditambahkan.");
+    public void Tambah_Mahasiswa(Mahasiswa Mahasiswa) {
+        if(Daftar_Mahasiswa.contains(Mahasiswa)) {
+            Daftar_Mahasiswa.add(Mahasiswa);
+            System.out.println("Mahasiswa '" + Mahasiswa.Get_Nama() + "' telah ditambahkan.");
         }
 
-        System.out.println("Mahasiswa '" + mahasiswa.getNama() + "' sudah ada.");
+        System.out.println("Mahasiswa '" + Mahasiswa.Get_Nama() + "' sudah ada.");
     }
 
-    public void tampilkan_mahasiswa_sedang_meminjam() {
-        System.out.println("Mahasiswa yang sedang meminjam buku:");
-        for (Map.Entry<Mahasiswa, List<Buku>> entry : daftar_mahasiswa_sedang_meminjam.entrySet()) {
-            Mahasiswa mhs = entry.getKey();
-            List<Buku> buku = entry.getValue();
-            System.out.print(mhs.getNama() + " (NIM: " + mhs.getNIM() + "): ");
+    public void Tampilkan_Mahasiswa_Sedang_Meminjam() {
+        System.out.println("Mahasiswa yang sedang meminjam Buku:");
+        for (Map.Entry<Mahasiswa, List<Buku>> entry : Daftar_Mahasiswa_Sedang_Meminjam.entrySet()) {
+            Mahasiswa Mahasiswa = entry.getKey();
+            List<Buku> Buku = entry.getValue();
+            System.out.print(Mahasiswa.Get_Nama() + " (NIM: " + Mahasiswa.Get_NIM() + "): ");
             
             StringJoiner stringJoiner = new StringJoiner(", ");
-            for (Buku b : buku)
-                stringJoiner.add(b.getJudul());
+            for (Buku B : Buku)
+                stringJoiner.add(B.Get_Judul());
 
             System.out.println(stringJoiner.toString());
             System.out.println();
@@ -102,15 +102,15 @@ public class Perpustakaan {
     }
 
     public void tampilkan_mahasiswa_pernah_meminjam() {
-        System.out.println("Mahasiswa yang sedang meminjam buku:");
-        for (Map.Entry<Mahasiswa, List<Buku>> entry : daftar_mahasiswa_pernah_meminjam.entrySet()) {
-            Mahasiswa mhs = entry.getKey();
-            List<Buku> buku = entry.getValue();
-            System.out.print(mhs.getNama() + " (NIM: " + mhs.getNIM() + "): ");
+        System.out.println("Mahasiswa yang sedang meminjam Buku:");
+        for (Map.Entry<Mahasiswa, List<Buku>> entry : Daftar_Mahasiswa_Pernah_Meminjam.entrySet()) {
+            Mahasiswa Mahasiswa = entry.getKey();
+            List<Buku> Buku = entry.getValue();
+            System.out.print(Mahasiswa.Get_Nama() + " (NIM: " + Mahasiswa.Get_NIM() + "): ");
             
             StringJoiner stringJoiner = new StringJoiner(", ");
-            for (Buku b : buku)
-                stringJoiner.add(b.getJudul());
+            for (Buku B : Buku)
+                stringJoiner.add(B.Get_Judul());
 
             System.out.println(stringJoiner.toString());
             System.out.println();
