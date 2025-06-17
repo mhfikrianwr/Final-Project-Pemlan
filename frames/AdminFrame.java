@@ -1,91 +1,359 @@
 package frames;
 
-import java.awt.*;
-import javax.swing.*;
+import java.util.List;
+
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
+
+import javax.swing.BorderFactory;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 public class AdminFrame extends JFrame {
-    private Color DARK_GREYISH_BLUE = new Color(56, 73, 89);
     // Atribut warna
-    private Color background_on = Color.DARK_GRAY;
-    private Color background_off = Color.LIGHT_GRAY;
+    private Color BREAKER_BAY = new Color(95, 158, 160);
+    private Color CADET_BLUE = new Color(159, 191, 222);
+    private Color DARK_GREYISH_BLUE = new Color(56,73,89);
+    private Color DEEP_DARK_BLUE = new Color(33, 52, 72);
+    private Color LIGHT_AZURE = new Color(84, 119, 146);
+    private Color SEAFOAM_GREEN = new Color(148, 180, 193);
+    private Color SOFT_BLUE = new Color(189, 221, 252);
+
+    // Atribut font
+    private Font TITLE_LABEL = new Font("Calibri", Font.BOLD, 30);
+    private Font LABEL = new Font("Calibri", Font.PLAIN, 16);
+    private Font COMBOBOX_FONT = new Font("Arial", Font.PLAIN, 14);
+    private Font TABLE_HEADER_FONT = new Font("Arial", Font.BOLD, 14);
+    private Font ALERT = new Font("Century Gothic", Font.BOLD, 18);
+
+    // Atribut untuk switch panel
+    private String PANEL_ONE = "Peminjaman Buku";
+    private String PANEL_TWO = "List Buku Pinjaman";
+    private String PANEL_THREE = "Update Peminjaman";
+    private String PANEL_FOUR = "Pengembalian Buku";
+
+    // Teks awalan
+    private JLabel Upper_Text = new JLabel("Menu Admin");
+
     public AdminFrame() {
+        // Title Dari aplikasi GUI
         this.setTitle("Admin");
+
+        // Diclose ketika memencet tanda silang
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setResizable(false);
-        this.setSize(900, 520);
-        this.setLayout(null);
+        this.setSize(900,520);
+        this.setLayout(new BorderLayout());
+        this.setLocationRelativeTo(null); // Layar ditengah
+        this.setVisible(true); // Menampilkan frame
 
-        // Background panel
-        JPanel bgrnd = new JPanel();
-        bgrnd.setLayout(null); // IMPORTANT: Allow manual positioning!
-        bgrnd.setBackground(DARK_GREYISH_BLUE);
-        bgrnd.setBounds(0, 0, 900, 520);
+        // Tombol
+        RoundButton Btn_Panel_One = new RoundButton("Peminjaman Buku", CADET_BLUE, SOFT_BLUE);
+        RoundButton Btn_Panel_Two = new RoundButton("List Buku Pinjaman", CADET_BLUE, SOFT_BLUE);
+        RoundButton Btn_Panel_Three = new RoundButton("Update Peminjaman", CADET_BLUE, SOFT_BLUE);
+        RoundButton Btn_Panel_Four = new RoundButton("Pengembalian Buku", CADET_BLUE, SOFT_BLUE);
+        RoundButton Btn_Panel_Five = new RoundButton("Kembali ke Menu Utama", CADET_BLUE, SOFT_BLUE);
 
-        // Label and Text Field For Nim Input
-        JLabel Nim_Label = new JLabel("NIM : ");
-        Nim_Label.setForeground(Color.WHITE); // So it's visible on dark background
-        Nim_Label.setBounds(50, 30, 100, 30);
+        // Buat panel untuk pemilihan menu
+        JPanel Left_Panel = new JPanel(new GridLayout(6, 1, 0, 32));
+        Left_Panel.setBackground(DARK_GREYISH_BLUE);
+        Left_Panel.setBorder(BorderFactory.createEmptyBorder(25, 40, 30, 40));
 
-        RoundTextField nim = new RoundTextField(20);
-        nim.setBounds(120, 30, 200, 30); // Visible height
+        Upper_Text.setFont(new Font("Century Gothic", Font.BOLD, 20));
+        Upper_Text.setForeground(Color.WHITE);
 
-        // Label and Text Field For name
-        JLabel Nama_Label = new JLabel("Nama : ");
-        Nama_Label.setForeground(Color.WHITE); // So it's visible on dark background
-        Nama_Label.setBounds(50, 80, 100, 30);
+        Left_Panel.add(Upper_Text);
+        Left_Panel.add(Btn_Panel_One);
+        Left_Panel.add(Btn_Panel_Two);
+        Left_Panel.add(Btn_Panel_Three);
+        Left_Panel.add(Btn_Panel_Four);
+        Left_Panel.add(Btn_Panel_Five);
 
-        RoundTextField Nama = new RoundTextField(20);
-        Nama.setBounds(120, 80, 200, 30); // Visible height
-        Nama.setEditable(false);
-        Nama.setFocusable(false);
+        // Buat panel untuk menampilkan konten
+        CardLayout Card_Layout = new CardLayout();
+        JPanel Main_Panel = new JPanel(Card_Layout);
 
-        // Label and Text Field For name
-        JLabel Prodi_Label = new JLabel("Prodi : ");
-        Prodi_Label.setForeground(Color.WHITE); // So it's visible on dark background
-        Prodi_Label.setBounds(50, 130, 100, 30);
+        Main_Panel.add(Create_Panel_One(), PANEL_ONE);
+        Main_Panel.add(Create_Panel_Two(), PANEL_TWO);
+        Main_Panel.add(Create_Panel_Three(), PANEL_THREE);
+        Main_Panel.add(Create_Panel_Four(), PANEL_FOUR);
 
-        RoundTextField Prodi = new RoundTextField(20);
-        Prodi.setBounds(120, 130, 200, 30); // Visible height
-        Prodi.setEditable(false);
-        Prodi.setFocusable(false);
+        Btn_Panel_One.addActionListener(e -> Card_Layout.show(Main_Panel, PANEL_ONE));
+        Btn_Panel_Two.addActionListener(e -> Card_Layout.show(Main_Panel, PANEL_TWO));
+        Btn_Panel_Three.addActionListener(e -> Card_Layout.show(Main_Panel, PANEL_THREE));
+        Btn_Panel_Four.addActionListener(e -> Card_Layout.show(Main_Panel, PANEL_FOUR));
+        Btn_Panel_Five.addActionListener(e -> {
+            EventQueue.invokeLater(MainFrame :: new);;
+            dispose();
+        });
 
+        this.add(Left_Panel, BorderLayout.WEST);
+        this.add(Main_Panel, BorderLayout.CENTER);
+    }
 
-        // Create Button search for nim
-        RoundButton Search_Nim = new RoundButton("Search Nim");
-        Search_Nim.setBounds(120,180,120,30);
-
-        // Create Text Field and Label To Search Book
-        JLabel Book_Label = new JLabel("Kode Buku:");
-        Book_Label.setForeground(Color.WHITE);
-        Book_Label.setBounds(400,30,100,30);
-        RoundTextField Book_Code = new RoundTextField(20);
-        Book_Code.setForeground(Color.WHITE);
-        Book_Code.setBounds(490,30, 200, 30);
-
-        // Create Button untuk kembalikan dan pinjam buku
-        RoundButton Pinjam_Buku = new RoundButton("Pinjam Buku");
-        Pinjam_Buku.setBounds(490,80,120,30);
-        RoundButton Kembali_Buku = new RoundButton("Kembali Buku");
-        Kembali_Buku.setBounds(490,130,120,30);
+    private JPanel Create_Panel_One() {
+        // Buat panel untuk peminjaman buku
+        JPanel Panel = new JPanel();
+        Panel.setLayout(null);
+        Panel.setBackground(DEEP_DARK_BLUE);
+        Panel.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
         
+        // Teks awal
+        JLabel Title = new JLabel("Form Peminjaman Buku");
+        Title.setForeground(Color.WHITE);
+        Title.setFont(TITLE_LABEL);
+        Title.setBounds(165, 40, 400, 30);
+        Panel.add(Title);
+        
+        // Label dan field untuk NIM
+        JLabel Label_NIM = new JLabel("NIM:");
+        Label_NIM.setForeground(Color.WHITE);
+        Label_NIM.setFont(LABEL);
+        Label_NIM.setBounds(50, 70, 100,70);
+        Panel.add(Label_NIM);
+        
+        RoundTextField Field_NIM = new RoundTextField(15);
+        Field_NIM.setBounds(50, 120, 530, 40);
+        Panel.add(Field_NIM);
+        
+        // Label dan field untuk Kode Buku
+        JLabel Label_Kode = new JLabel("Kode Buku:");
+        Label_Kode.setForeground(Color.WHITE);
+        Label_Kode.setFont(LABEL);
+        Label_Kode.setBounds(50, 150, 100, 70);
+        Panel.add(Label_Kode);
+        
+        RoundTextField Field_Kode = new RoundTextField(100);
+        Field_Kode.setBounds(50, 200, 530, 40);
+        Panel.add(Field_Kode);
+        
+        // Label dan field untuk Nama Buku
+        JLabel Nama_Buku = new JLabel("Nama Buku:");
+        Nama_Buku.setForeground(Color.WHITE);
+        Nama_Buku.setFont(LABEL);
+        Nama_Buku.setBounds(50, 230, 100, 70);
+        Panel.add(Nama_Buku);
+        
+        RoundTextField Field_Nama = new RoundTextField(100);
+        Field_Nama.setBounds(50, 280, 530, 40);
+        Panel.add(Field_Nama);
 
-        // Add components to panel bgrnd
-        bgrnd.add(Nim_Label);
-        bgrnd.add(nim);
-        bgrnd.add(Nama_Label);
-        bgrnd.add(Nama);
-        bgrnd.add(Prodi_Label);
-        bgrnd.add(Prodi);
-        bgrnd.add(Search_Nim);
-        bgrnd.add(Book_Label);
-        bgrnd.add(Book_Code);
-        bgrnd.add(Pinjam_Buku);
-        bgrnd.add(Kembali_Buku);
+        // Label alert untuk error logic
+        JLabel Alert = new JLabel("CUSTOM ERROR HERE (IF NOT ERROR, SET BLANK)");
+        Alert.setForeground(Color.RED);
+        Alert.setFont(ALERT);
+        Alert.setBounds(50, 325, 530, 40);
+        Panel.add(Alert);
 
-        // Add bgrnd to frame
-        this.add(bgrnd);
+        // Tombol Pinjam
+        RoundButton Button = new RoundButton("Pinjam", LIGHT_AZURE, SEAFOAM_GREEN);
+        Button.setBounds(50, 370, 530, 70);
+        Panel.add(Button);
 
-        // Show frame
-        this.setVisible(true);
+        return Panel;
+    }
+
+    private JPanel Create_Panel_Two() {
+        JPanel Panel = new JPanel(new BorderLayout(10, 10));
+        Panel.setBackground(DEEP_DARK_BLUE);
+        Panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Menambahkan padding
+        
+        String[] Columns = {"Kode Buku", "Judul", "Status", "NIM"};
+        String[] Search = {"Kode Buku", "Judul", "NIM"};
+        
+        JComboBox<String> Sort = new JComboBox<>(Search);
+        Sort.setFont(COMBOBOX_FONT); // Mengatur font JComboBox
+        DefaultTableModel Table_Model = new DefaultTableModel(Columns, 0);
+        JTable Table = new JTable(Table_Model);
+        Table.setRowHeight(25); // Mengatur tinggi baris
+        Table.getTableHeader().setFont(TABLE_HEADER_FONT); // Mengatur font header tabel
+        Table.getTableHeader().setBackground(BREAKER_BAY); // Mengatur warna latar belakang header
+        Table.getTableHeader().setForeground(Color.WHITE); // Mengatur warna teks header
+        TableRowSorter<DefaultTableModel> Sorter = new TableRowSorter<>(Table_Model);
+        JScrollPane Scroll_Pane = new JScrollPane(Table);
+        Table.setRowSorter(Sorter);
+        
+        // Menambahkan komponen ke panel
+        JPanel Top_Panel = new JPanel(new FlowLayout(FlowLayout.RIGHT)); // Panel untuk JComboBox
+        Top_Panel.add(Sort);
+        Top_Panel.setBackground(DEEP_DARK_BLUE);
+
+        Panel.add(Top_Panel, BorderLayout.NORTH); // Menambahkan panel di bagian atas
+        Panel.add(Scroll_Pane, BorderLayout.CENTER); // Menambahkan JScrollPane di tengah
+        
+        // Data dummy
+        for (int i = 0; i < 16; i++) {
+            Object[] row = {"Kode" + i, "Judul" + i, i % 2 == 0? "Borrowed" : "Free", "NIM" + i};
+            Table_Model.addRow(row);
+        }
+        
+        Sort.addActionListener(e -> {
+            int index = Sort.getSelectedIndex();
+            Sorter.setSortKeys(List.of(new RowSorter.SortKey(index, SortOrder.ASCENDING)));
+        });
+        
+        return Panel;
+    }
+
+    private JPanel Create_Panel_Three() {
+        JPanel Panel = new JPanel(null);
+        Panel.setBackground(DEEP_DARK_BLUE);
+        Panel.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
+
+        JLabel Title = new JLabel("Update Data Peminjaman Buku");
+        Title.setFont(TITLE_LABEL);
+        Title.setForeground(Color.WHITE);
+        Title.setBounds(115, 20, 500, 30);
+        Panel.add(Title);
+
+        // Label dan field input
+        JLabel Label_NIM = new JLabel("NIM:");
+        Label_NIM.setBounds(50, 60, 100, 30);
+        Label_NIM.setForeground(Color.WHITE);
+        Label_NIM.setFont(LABEL);
+        Panel.add(Label_NIM);
+
+        RoundTextField Input_NIM = new RoundTextField(15);
+        Input_NIM.setBounds(150, 60, 250, 30);
+        Panel.add(Input_NIM);
+
+        JLabel Label_Kode = new JLabel("Kode Buku:");
+        Label_Kode.setBounds(50, 100, 100, 30);
+        Label_Kode.setForeground(Color.WHITE);
+        Label_Kode.setFont(LABEL);
+        Panel.add(Label_Kode);
+
+        RoundTextField Input_Kode = new RoundTextField(15);
+        Input_Kode.setBounds(150, 100, 250, 30);
+        Panel.add(Input_Kode);
+
+        JLabel Label_Judul = new JLabel("Judul Buku:");
+        Label_Judul.setBounds(50, 140, 100, 30);
+        Label_Judul.setForeground(Color.WHITE);
+        Label_Judul.setFont(LABEL);
+        Panel.add(Label_Judul);
+
+        RoundTextField Input_Judul = new RoundTextField(15);
+        Input_Judul.setBounds(150, 140, 250, 30);
+        Panel.add(Input_Judul);
+
+        JLabel Label_Status = new JLabel("Status:");
+        Label_Status.setBounds(50, 180, 100, 30);
+        Label_Status.setForeground(Color.WHITE);
+        Label_Status.setFont(LABEL);
+        Panel.add(Label_Status);
+
+        JComboBox<String> Input_Status = new JComboBox<>(new String[] {"Borrowed", "Free"});
+        Input_Status.setFont(COMBOBOX_FONT);
+        Input_Status.setBounds(150, 180, 250, 30);
+        Panel.add(Input_Status);
+
+        // Tabel & ScrollPane
+        String[] columns = {"Kode Buku", "Judul", "Status", "NIM"};
+        DefaultTableModel Table_Model = new DefaultTableModel(columns, 0);
+        JTable table = new JTable(Table_Model);
+        table.setRowHeight(25);
+        table.getTableHeader().setFont(TABLE_HEADER_FONT);
+        table.getTableHeader().setBackground(BREAKER_BAY);
+        table.getTableHeader().setForeground(Color.WHITE);
+
+        JScrollPane Scroll_Pane = new JScrollPane(table);
+        Scroll_Pane.setBounds(50, 240, 525, 150);
+        Panel.add(Scroll_Pane);
+
+        // Alert message
+        JLabel Alert = new JLabel("CUSTOM ERROR HERE (IF NOT ERROR, SET BLANK)");
+        Alert.setBounds(50, 420, 530, 30);
+        Alert.setFont(ALERT);
+        Alert.setForeground(Color.RED);
+        Panel.add(Alert);
+
+        // Tombol Update
+        RoundButton btnUpdate = new RoundButton("Update", LIGHT_AZURE, SEAFOAM_GREEN);
+        btnUpdate.setBounds(450, 100, 150, 40);
+        Panel.add(btnUpdate);
+
+        // Data dummy
+        for (int i = 0; i < 16; i++) {
+            Object[] row = {"Kode" + i, "Judul" + i, i % 2 == 0? "Borrowed" : "Free", "NIM" + i};
+            Table_Model.addRow(row);
+        }
+
+        return Panel;
+    }
+
+    private JPanel Create_Panel_Four() {
+        // Buat panel untuk peminjaman buku
+        JPanel Panel = new JPanel();
+        Panel.setLayout(null);
+        Panel.setBackground(DEEP_DARK_BLUE);
+        Panel.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
+        
+        // Teks awal
+        JLabel Title = new JLabel("Form Pengembalian Buku");
+        Title.setForeground(Color.WHITE);
+        Title.setFont(TITLE_LABEL);
+        Title.setBounds(155, 40, 400, 30);
+        Panel.add(Title);
+        
+        // Label dan field untuk NIM
+        JLabel Label_NIM = new JLabel("NIM:");
+        Label_NIM.setForeground(Color.WHITE);
+        Label_NIM.setFont(LABEL);
+        Label_NIM.setBounds(50, 70, 100,70);
+        Panel.add(Label_NIM);
+        
+        RoundTextField Field_NIM = new RoundTextField(15);
+        Field_NIM.setBounds(50, 120, 530, 40);
+        Panel.add(Field_NIM);
+        
+        // Label dan field untuk Kode Buku
+        JLabel Label_Kode = new JLabel("Kode Buku:");
+        Label_Kode.setForeground(Color.WHITE);
+        Label_Kode.setFont(LABEL);
+        Label_Kode.setBounds(50, 150, 100, 70);
+        Panel.add(Label_Kode);
+        
+        RoundTextField Field_Kode = new RoundTextField(100);
+        Field_Kode.setBounds(50, 200, 530, 40);
+        Panel.add(Field_Kode);
+        
+        // Label dan field untuk Nama Buku
+        JLabel Nama_Buku = new JLabel("Nama Buku:");
+        Nama_Buku.setForeground(Color.WHITE);
+        Nama_Buku.setFont(LABEL);
+        Nama_Buku.setBounds(50, 230, 100, 70);
+        Panel.add(Nama_Buku);
+        
+        RoundTextField Field_Nama = new RoundTextField(100);
+        Field_Nama.setBounds(50, 280, 530, 40);
+        Panel.add(Field_Nama);
+
+        // Label alert untuk error logic
+        JLabel Alert = new JLabel("CUSTOM ERROR HERE (IF NOT ERROR, SET BLANK)");
+        Alert.setForeground(Color.RED);
+        Alert.setFont(ALERT);
+        Alert.setBounds(50, 325, 530, 40);
+        Panel.add(Alert);
+
+        // Tombol Pinjam
+        RoundButton Button = new RoundButton("Kembali", LIGHT_AZURE, SEAFOAM_GREEN);
+        Button.setBounds(50, 370, 530, 70);
+        Panel.add(Button);
+
+        return Panel;
     }
 }

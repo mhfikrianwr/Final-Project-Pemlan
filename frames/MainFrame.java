@@ -4,52 +4,66 @@ import java.awt.*;
 import javax.swing.*;
 
 public class MainFrame extends JFrame {
-    // Atribut warna
+    // Atribut Warna
+    private Color DARK_GREYISH_BLUE = new Color(56, 73, 89);
     private Color CADET_BLUE = new Color(159, 191, 222);
-    private Color DARK_GREYISH_BLUE = new Color(56,73,89);
     private Color SOFT_BLUE = new Color(189, 221, 252);
-    
+
+    // Atribut font
+    private Font LABEL = new Font("Calibri", Font.PLAIN, 20);
+    private Font ALERT = new Font("Century Gothic", Font.BOLD, 18);
+
     public MainFrame() {
-        this.setTitle("Perpustakaan"); // Title Dari aplikasi GUI
-        this.setDefaultCloseOperation(this.EXIT_ON_CLOSE); // Diclose ketika memencet tanda silang
-        this.setResizable(false);
+        this.setTitle("Perpustakaan");
         this.setSize(900,520);
-        this.setLayout(null);
-        this.setLocationRelativeTo(null); 
-        this.setVisible(true); // Nampilin Framenya
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setLayout(new BorderLayout());
+        this.setLocationRelativeTo(null); // Layar ditengah
+        this.setVisible(true); // Agar terlihat
 
-       // Buat 2 button awal dengan meng-assign warnanya
-        RoundButton adminLogin = new RoundButton("Login Sebagai Admin", CADET_BLUE, SOFT_BLUE);
-        RoundButton siswaLogin = new RoundButton("Login Sebagai Mahasiswa", CADET_BLUE, SOFT_BLUE);
+        // Panel utama
+        JPanel Panel = new JPanel(new GridLayout(5, 1, 0, 10));
+        Panel.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
+        Panel.setBackground(DARK_GREYISH_BLUE);
 
-        //Buat panel untuk backround
-        JPanel bgrnd = new JPanel();
-        bgrnd.setBackground(DARK_GREYISH_BLUE);
+        JLabel User_Label = new JLabel("Username:");
+        User_Label.setForeground(Color.WHITE);
+        User_Label.setFont(LABEL);
+        RoundTextField User_Field = new RoundTextField(100);
 
-        // atur posisinya karena layoutnya null (x, y, width, height)
-        bgrnd.setBounds(0,0,900,520);
-        adminLogin.setBounds(250,150,400,40);
-        siswaLogin.setBounds(250, 210, 400, 40);
-        
-        
-        ImageIcon image = new ImageIcon("Images/App_Logo.png");
-        this.setIconImage(image.getImage());
+        JLabel Password_Label = new JLabel("Password:");
+        Password_Label.setForeground(Color.WHITE);
+        Password_Label.setFont(LABEL);
+        RoundPasswordField Password_Field = new RoundPasswordField(100);
 
-        
-        //Tambahin buttonnya ke Frame utama
-        this.add(adminLogin);
-        this.add(siswaLogin);
-        this.add(bgrnd);
+        JLabel Alert_Message = new JLabel("");
+        Alert_Message.setForeground(Color.RED);
+        Alert_Message.setFont(ALERT);
 
+        // Tombol
+        RoundButton loginButton = new RoundButton("Login", CADET_BLUE, SOFT_BLUE);
 
-        // Action Listener saat tekan tombol keduanya
-        adminLogin.addActionListener(e -> {
-            new AdminFrame();
-            dispose();
-        });
-        siswaLogin.addActionListener(e -> {
-            new SiswaFrame();
-            dispose();
+        // Tambahkan komponen ke Panel
+        Panel.add(User_Label);
+        Panel.add(User_Field);
+        Panel.add(Password_Label);
+        Panel.add(Password_Field);
+        Panel.add(loginButton);
+
+        this.add(Panel, BorderLayout.CENTER);
+        this.add(Alert_Message, BorderLayout.SOUTH);
+
+        loginButton.addActionListener(e -> {
+            String username = User_Field.getText();
+            String password = new String(Password_Field.getPassword());
+
+            if (username.equals("admin") && password.equals("adminlogin")) {
+                Alert_Message.setText("Login berhasil!");
+                EventQueue.invokeLater(AdminFrame :: new);
+                dispose();
+            } else {
+                Alert_Message.setText("Username atau password salah.");
+            }
         });
     }
 }
