@@ -1,7 +1,5 @@
 package frames;
 
-import java.util.List;
-
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -9,7 +7,10 @@ import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -21,7 +22,6 @@ import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
-
 public class AdminFrame extends JFrame {
     // Atribut warna
     private Color BREAKER_BAY = new Color(95, 158, 160);
@@ -194,12 +194,18 @@ public class AdminFrame extends JFrame {
         Panel.add(Top_Panel, BorderLayout.NORTH); // Menambahkan panel di bagian atas
         Panel.add(Scroll_Pane, BorderLayout.CENTER); // Menambahkan JScrollPane di tengah
         
-        // Data dummy
-        for (int i = 0; i < 16; i++) {
-            Object[] row = {"Kode" + i, "Judul" + i, i % 2 == 0? "Borrowed" : "Free", "NIM" + i};
-            Table_Model.addRow(row);
+        // Ambil data buku dari File
+        try{
+            BufferedReader reader = new BufferedReader(new FileReader("data/buku.txt"));
+            String lines;
+            while((lines = reader.readLine())!= null){
+                String[] kolom = lines.trim().split(" ");
+                Object[] row = {kolom[0], kolom[1], kolom[2], kolom[3]};
+                Table_Model.addRow(row);
+            }
+        } catch(IOException e){
+            System.out.println(e.getMessage());
         }
-        
         Sort.addActionListener(e -> {
             int index = Sort.getSelectedIndex();
             Sorter.setSortKeys(List.of(new RowSorter.SortKey(index, SortOrder.ASCENDING)));
@@ -287,9 +293,16 @@ public class AdminFrame extends JFrame {
         Panel.add(btnUpdate);
 
         // Data dummy
-        for (int i = 0; i < 16; i++) {
-            Object[] row = {"Kode" + i, "Judul" + i, i % 2 == 0? "Borrowed" : "Free", "NIM" + i};
-            Table_Model.addRow(row);
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("data/buku.txt"));
+            String lines;
+            while ((lines = reader.readLine()) != null) {
+                String[] kolom = lines.trim().split(" ");
+                Object[] row = { kolom[0], kolom[1], kolom[2], kolom[3] };
+                Table_Model.addRow(row);
+            }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
         }
 
         return Panel;
