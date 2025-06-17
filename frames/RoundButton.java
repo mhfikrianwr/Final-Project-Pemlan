@@ -1,6 +1,7 @@
 package frames;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
@@ -14,12 +15,16 @@ public class RoundButton extends JButton {
     private Color background_on = Color.DARK_GRAY;
     private Color background_off = Color.LIGHT_GRAY;
 
+    // Atribut font
+    private Font CENTURY_GOTHIC = new Font("Century Gothic", Font.BOLD, 13);
+
     public RoundButton(String label, Color background_on, Color background_off) {
         super(label);
         setContentAreaFilled(false); // Remove border line
         setFocusPainted(false); // Remove dotted line on click
         setBorderPainted(false); // Remove button border
         setSize(200,50);
+        setFont(CENTURY_GOTHIC);
 
         this.background_on = background_on;
         this.background_off = background_off;

@@ -3,14 +3,27 @@ package frames;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 public class SiswaFrame extends JFrame {
+    private Color PANEL_BG = new Color(240, 248, 255); // AliceBlue
+    private Color FIELD_BG = new Color(255, 255, 255);
+    private Color TEXT_COLOR = new Color(33, 42, 62);
+
+    
     // Atribut warna
     private Color CADET_BLUE = new Color(159, 191, 222);
     private Color DARK_GREYISH_BLUE = new Color(56,73,89);
@@ -51,7 +64,7 @@ public class SiswaFrame extends JFrame {
         Upper_Text.setFont(new Font("Century Gothic", Font.BOLD, 20));
         Upper_Text.setForeground(Color.WHITE);
 
-        Left_Panel.add(Upper_Text, BorderLayout.NORTH);
+        Left_Panel.add(Upper_Text);
         Left_Panel.add(Btn_Panel_One);
         Left_Panel.add(Btn_Panel_Two);
         Left_Panel.add(Btn_Panel_Three);
@@ -85,15 +98,56 @@ public class SiswaFrame extends JFrame {
 
     private JPanel Create_Panel_One() {
         JPanel panel = new JPanel();
-        panel.setBackground(Color.CYAN);
+        panel.setBackground(new Color(33, 52, 72));
+        panel.setLayout(new GridLayout(6,1,20,20));
+        panel.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
+
+        JLabel title = new JLabel("Form Peminjaman Buku");
+        title.setForeground(Color.WHITE);
+        
+        JLabel labelKode = new JLabel("Kode Buku:");
+        labelKode.setForeground(Color.WHITE);
+
+        JTextField fieldKode = new JTextField();
+        fieldKode.setForeground(FIELD_BG);
+        fieldKode.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+
+        RoundButton btnPinjam = new RoundButton("Pinjam", CADET_BLUE, SOFT_BLUE);
+        
+        panel.add(title);
+        panel.add(labelKode);
+        panel.add(fieldKode);
+        panel.add(btnPinjam);
+
         return panel;
     }
 
     private JPanel Create_Panel_Two() {
-        JPanel panel = new JPanel();
-        panel.setBackground(Color.GREEN);
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(PANEL_BG);
+        panel.setBorder(BorderFactory.createEmptyBorder(30, 40, 30, 40));
+
+        JLabel title = new JLabel("Daftar Buku yang Sedang Dipinjam");
+        title.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        title.setForeground(TEXT_COLOR);
+
+        JTextArea area = new JTextArea();
+        area.setEditable(false);
+        area.setLineWrap(true);
+        area.setWrapStyleWord(true);
+        area.setBackground(FIELD_BG);
+
+        JButton btnTampilkan = new JButton("Tampilkan");
+        btnTampilkan.setBackground(SOFT_BLUE);
+        btnTampilkan.setFocusPainted(false);
+
+        panel.add(title, BorderLayout.NORTH);
+        panel.add(new JScrollPane(area), BorderLayout.CENTER);
+        panel.add(btnTampilkan, BorderLayout.SOUTH);
+
         return panel;
     }
+
 
     private JPanel Create_Panel_Three() {
         JPanel panel = new JPanel();
@@ -103,7 +157,40 @@ public class SiswaFrame extends JFrame {
     
     private JPanel Create_Panel_Four() {
         JPanel panel = new JPanel();
-        panel.setBackground(Color.GRAY);
+        panel.setBackground(PANEL_BG);
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
+
+        JLabel title = new JLabel("Form Pengembalian Buku");
+        title.setFont(new Font("Segoe UI", Font.BOLD, 22));
+        title.setForeground(TEXT_COLOR);
+        title.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+
+        JLabel labelKode = new JLabel("Kode Buku:");
+        
+        JTextField fieldKode = new JTextField();
+        fieldKode.setBackground(FIELD_BG);
+        fieldKode.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+
+        JButton btnKembali = new JButton("Kembalikan");
+        btnKembali.setBackground(CADET_BLUE);
+        btnKembali.setForeground(Color.BLACK);
+        btnKembali.setFocusPainted(false);
+        btnKembali.setAlignmentX(JButton.CENTER_ALIGNMENT);
+
+        JLabel hasil = new JLabel(" ");
+        hasil.setForeground(Color.DARK_GRAY);
+        hasil.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+
+        panel.add(title);
+        panel.add(Box.createVerticalStrut(20));
+        panel.add(labelKode);
+        panel.add(fieldKode);
+        panel.add(Box.createVerticalStrut(20));
+        panel.add(btnKembali);
+        panel.add(Box.createVerticalStrut(10));
+        panel.add(hasil);
+
         return panel;
     }
 }
