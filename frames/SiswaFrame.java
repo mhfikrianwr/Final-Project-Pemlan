@@ -1,4 +1,4 @@
-package Main_Frame;
+package frames;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;

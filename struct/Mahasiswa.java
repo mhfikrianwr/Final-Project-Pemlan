@@ -1,4 +1,4 @@
-package Class_Java;
+package struct;
 
 public class Mahasiswa {
     //Atribut Mahasiswa

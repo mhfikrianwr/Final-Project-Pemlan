@@ -1,7 +1,8 @@
-package Main_App;
+package application;
 
-import Main_Frame.MainFrame;
 import java.awt.EventQueue;
+
+import frames.MainFrame;
 
 public class AppRun {
     public static void main(String[] args){

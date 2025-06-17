@@ -1,4 +1,4 @@
-package Class_Java;
+package struct;
 
 public class Buku {
     // Membuat Atribut-Atribut untuk buku
