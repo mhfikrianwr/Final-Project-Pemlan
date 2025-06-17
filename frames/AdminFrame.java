@@ -22,6 +22,12 @@ import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
+<<<<<<< HEAD
+=======
+
+import java.time.LocalDate;
+
+>>>>>>> 71cb8f66d17dc8bdb7e0d095ee031b5172806b57
 public class AdminFrame extends JFrame {
     // Atribut warna
     private Color BREAKER_BAY = new Color(95, 158, 160);
@@ -67,14 +73,21 @@ public class AdminFrame extends JFrame {
         RoundButton Btn_Panel_Four = new RoundButton("Pengembalian Buku", CADET_BLUE, SOFT_BLUE);
         RoundButton Btn_Panel_Five = new RoundButton("Kembali ke Menu Utama", CADET_BLUE, SOFT_BLUE);
 
+        // Set Tanggal
+        LocalDate Tanggal = LocalDate.of(2025, 06, 18);
+        JLabel Tanggal_Label = new JLabel(Tanggal.toString());
+        Tanggal_Label.setForeground(Color.WHITE);
+        Tanggal_Label.setFont(TITLE_LABEL);
+
         // Buat panel untuk pemilihan menu
-        JPanel Left_Panel = new JPanel(new GridLayout(6, 1, 0, 32));
+        JPanel Left_Panel = new JPanel(new GridLayout(7, 1, 0, 22));
         Left_Panel.setBackground(DARK_GREYISH_BLUE);
         Left_Panel.setBorder(BorderFactory.createEmptyBorder(25, 40, 30, 40));
 
         Upper_Text.setFont(new Font("Century Gothic", Font.BOLD, 20));
         Upper_Text.setForeground(Color.WHITE);
 
+        Left_Panel.add(Tanggal_Label);
         Left_Panel.add(Upper_Text);
         Left_Panel.add(Btn_Panel_One);
         Left_Panel.add(Btn_Panel_Two);
@@ -141,10 +154,10 @@ public class AdminFrame extends JFrame {
         Panel.add(Field_Kode);
         
         // Label dan field untuk Nama Buku
-        JLabel Nama_Buku = new JLabel("Nama Buku:");
+        JLabel Nama_Buku = new JLabel("Tanggal Pinjam:");
         Nama_Buku.setForeground(Color.WHITE);
         Nama_Buku.setFont(LABEL);
-        Nama_Buku.setBounds(50, 230, 100, 70);
+        Nama_Buku.setBounds(50, 230, 200, 70);
         Panel.add(Nama_Buku);
         
         RoundTextField Field_Nama = new RoundTextField(100);
@@ -171,8 +184,8 @@ public class AdminFrame extends JFrame {
         Panel.setBackground(DEEP_DARK_BLUE);
         Panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Menambahkan padding
         
-        String[] Columns = {"Kode Buku", "Judul", "Status", "NIM"};
-        String[] Search = {"Kode Buku", "Judul", "NIM"};
+        String[] Columns = {"Kode Buku", "Judul", "Status", "Tanggal Pinjam", "Tanggal Kembali", "NIM"};
+        String[] Search = {"Kode Buku", "Judul", "Tanggal Pinjam", "Tanggal Kembali", "NIM"};
         
         JComboBox<String> Sort = new JComboBox<>(Search);
         Sort.setFont(COMBOBOX_FONT); // Mengatur font JComboBox
@@ -194,6 +207,7 @@ public class AdminFrame extends JFrame {
         Panel.add(Top_Panel, BorderLayout.NORTH); // Menambahkan panel di bagian atas
         Panel.add(Scroll_Pane, BorderLayout.CENTER); // Menambahkan JScrollPane di tengah
         
+<<<<<<< HEAD
         // Ambil data buku dari File
         try{
             BufferedReader reader = new BufferedReader(new FileReader("data/buku.txt"));
@@ -205,6 +219,12 @@ public class AdminFrame extends JFrame {
             }
         } catch(IOException e){
             System.out.println(e.getMessage());
+=======
+        // Data dummy
+        for (int i = 0; i < 16; i++) {
+            Object[] row = {"Kode" + i, "Judul" + i, i % 2 == 0? "Borrowed" : "Free", "2025-06-15", "2025-06-22", "NIM" + i};
+            Table_Model.addRow(row);
+>>>>>>> 71cb8f66d17dc8bdb7e0d095ee031b5172806b57
         }
         Sort.addActionListener(e -> {
             int index = Sort.getSelectedIndex();
@@ -225,7 +245,7 @@ public class AdminFrame extends JFrame {
         Title.setBounds(115, 20, 500, 30);
         Panel.add(Title);
 
-        // Label dan field input
+        // Label dan field input untuk NIM
         JLabel Label_NIM = new JLabel("NIM:");
         Label_NIM.setBounds(50, 60, 100, 30);
         Label_NIM.setForeground(Color.WHITE);
@@ -236,6 +256,7 @@ public class AdminFrame extends JFrame {
         Input_NIM.setBounds(150, 60, 250, 30);
         Panel.add(Input_NIM);
 
+        // Label dan field input untuk Kode Buku
         JLabel Label_Kode = new JLabel("Kode Buku:");
         Label_Kode.setBounds(50, 100, 100, 30);
         Label_Kode.setForeground(Color.WHITE);
@@ -246,6 +267,7 @@ public class AdminFrame extends JFrame {
         Input_Kode.setBounds(150, 100, 250, 30);
         Panel.add(Input_Kode);
 
+        // Label dan field input untuk Judul Buku
         JLabel Label_Judul = new JLabel("Judul Buku:");
         Label_Judul.setBounds(50, 140, 100, 30);
         Label_Judul.setForeground(Color.WHITE);
@@ -256,19 +278,30 @@ public class AdminFrame extends JFrame {
         Input_Judul.setBounds(150, 140, 250, 30);
         Panel.add(Input_Judul);
 
+        // Label dan field input untuk Tanggal Pinjam
+        JLabel Label_Tanggal_Pinjam = new JLabel("Tgl Pinjam:");
+        Label_Tanggal_Pinjam.setBounds(50, 180, 100, 30);
+        Label_Tanggal_Pinjam.setForeground(Color.WHITE);
+        Label_Tanggal_Pinjam.setFont(LABEL);
+        Panel.add(Label_Tanggal_Pinjam);
+
+        RoundTextField Input_Tanggal_Pinjam = new RoundTextField(15);
+        Input_Tanggal_Pinjam.setBounds(150, 180, 250, 30);
+        Panel.add(Input_Tanggal_Pinjam);
+
         JLabel Label_Status = new JLabel("Status:");
-        Label_Status.setBounds(50, 180, 100, 30);
+        Label_Status.setBounds(50, 220, 100, 30);
         Label_Status.setForeground(Color.WHITE);
         Label_Status.setFont(LABEL);
         Panel.add(Label_Status);
 
         JComboBox<String> Input_Status = new JComboBox<>(new String[] {"Borrowed", "Free"});
         Input_Status.setFont(COMBOBOX_FONT);
-        Input_Status.setBounds(150, 180, 250, 30);
+        Input_Status.setBounds(150, 220, 250, 30);
         Panel.add(Input_Status);
 
         // Tabel & ScrollPane
-        String[] columns = {"Kode Buku", "Judul", "Status", "NIM"};
+        String[] columns = {"Kode Buku", "Judul", "Status", "Tanggal Pinjam", "Tanggal Kembali", "NIM"};
         DefaultTableModel Table_Model = new DefaultTableModel(columns, 0);
         JTable table = new JTable(Table_Model);
         table.setRowHeight(25);
@@ -277,7 +310,7 @@ public class AdminFrame extends JFrame {
         table.getTableHeader().setForeground(Color.WHITE);
 
         JScrollPane Scroll_Pane = new JScrollPane(table);
-        Scroll_Pane.setBounds(50, 240, 525, 150);
+        Scroll_Pane.setBounds(50, 260, 525, 150);
         Panel.add(Scroll_Pane);
 
         // Alert message
@@ -289,10 +322,11 @@ public class AdminFrame extends JFrame {
 
         // Tombol Update
         RoundButton btnUpdate = new RoundButton("Update", LIGHT_AZURE, SEAFOAM_GREEN);
-        btnUpdate.setBounds(450, 100, 150, 40);
+        btnUpdate.setBounds(450, 130, 150, 40);
         Panel.add(btnUpdate);
 
         // Data dummy
+<<<<<<< HEAD
         try {
             BufferedReader reader = new BufferedReader(new FileReader("data/buku.txt"));
             String lines;
@@ -303,6 +337,11 @@ public class AdminFrame extends JFrame {
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());
+=======
+        for (int i = 0; i < 16; i++) {
+            Object[] row = {"Kode" + i, "Judul" + i, i % 2 == 0? "Borrowed" : "Free", "2025-06-15", "2025-06-22", "NIM" + i};
+            Table_Model.addRow(row);
+>>>>>>> 71cb8f66d17dc8bdb7e0d095ee031b5172806b57
         }
 
         return Panel;
