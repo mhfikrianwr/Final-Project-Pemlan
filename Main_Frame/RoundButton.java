@@ -2,6 +2,7 @@ package Main_Frame;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 import javax.swing.JButton;
 
@@ -33,13 +34,15 @@ public class RoundButton extends JButton {
     }
 
     protected void paintComponent(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g.create();
+
         // Jika tombol diklik mengubah warna latar belakang
         if(getModel().isArmed())
-            g.setColor(background_on);
+            g2d.setColor(background_on);
         else
-            g.setColor(background_off);
+            g2d.setColor(background_off);
             
-            g.fillRoundRect(0,0, getWidth(), getHeight(), radius, radius);
-            super.paintComponent(g);
+            g2d.fillRoundRect(0,0, getWidth(), getHeight(), radius, radius);
+            super.paintComponent(g2d);
     }
 }

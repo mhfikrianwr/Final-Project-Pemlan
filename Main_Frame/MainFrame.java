@@ -20,7 +20,7 @@ public class MainFrame extends JFrame {
 
        // Buat 2 button awal dengan meng-assign warnanya
         RoundButton adminLogin = new RoundButton("Login sebagai admin", CADET_BLUE, SOFT_BLUE);
-        RoundButton siswaLogin = new RoundButton("Login sebagai siswa", CADET_BLUE, SOFT_BLUE);
+        RoundButton siswaLogin = new RoundButton("Login sebagai mahasiswa", CADET_BLUE, SOFT_BLUE);
 
         //Buat panel untuk backround
         JPanel bgrnd = new JPanel();
