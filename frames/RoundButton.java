@@ -47,7 +47,7 @@ public class RoundButton extends JButton {
         else
             g2d.setColor(background_off);
             
-            g2d.fillRoundRect(0,0, getWidth(), getHeight(), radius, radius);
-            super.paintComponent(g2d);
+        g2d.fillRoundRect(0,0, getWidth(), getHeight(), radius, radius);
+        super.paintComponent(g2d);
     }
 }

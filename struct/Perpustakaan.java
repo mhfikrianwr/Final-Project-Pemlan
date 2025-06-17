@@ -101,7 +101,7 @@ public class Perpustakaan {
         }
     }
 
-    public void tampilkan_mahasiswa_pernah_meminjam() {
+    public void Tampilkan_Mahasiswa_Pernah_Meminjam() {
         System.out.println("Mahasiswa yang sedang meminjam Buku:");
         for (Map.Entry<Mahasiswa, List<Buku>> entry : Daftar_Mahasiswa_Pernah_Meminjam.entrySet()) {
             Mahasiswa Mahasiswa = entry.getKey();

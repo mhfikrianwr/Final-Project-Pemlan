@@ -1,14 +1,23 @@
 package frames;
-import java.awt.*;
-import javax.swing.*;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import javax.swing.BorderFactory;
+import javax.swing.JTextField;
+
 
 public class RoundTextField extends JTextField {
-
+    private Font CENTURY_GOTHIC = new Font("Century Gothic", Font.PLAIN, 13);
     private int arcWidth = 20;  // How round the corners are
     private int arcHeight = 20;
 
+
     public RoundTextField(int columns) {
         super(columns);
+        setFont(CENTURY_GOTHIC); // Set font to Century Gothic
         setOpaque(false);  // So background can be custom painted
         setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));  // Padding
     }
