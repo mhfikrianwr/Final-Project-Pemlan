@@ -207,122 +207,87 @@ public class SiswaFrame extends JFrame {
     }
 
     private JPanel Create_Panel_Three() {
-            JPanel Panel = new JPanel(null);
-    Panel.setBackground(DEEP_DARK_BLUE);
-    Panel.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
+        JPanel Panel = new JPanel(null);
+        Panel.setBackground(DEEP_DARK_BLUE);
+        Panel.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
 
-    JLabel Title = new JLabel("Update Data Peminjaman Buku");
-    Title.setFont(TITLE_LABEL);
-    Title.setForeground(Color.WHITE);
-    Title.setBounds(200, 10, 500, 30);
-    Panel.add(Title);
+        JLabel Title = new JLabel("Update Data Peminjaman Buku");
+        Title.setFont(TITLE_LABEL);
+        Title.setForeground(Color.WHITE);
+        Title.setBounds(200, 10, 500, 30);
+        Panel.add(Title);
 
-    // Label dan field input
-    JLabel labelNIM = new JLabel("NIM:");
-    labelNIM.setBounds(50, 60, 100, 30);
-    labelNIM.setForeground(Color.WHITE);
-    labelNIM.setFont(LABEL);
-    Panel.add(labelNIM);
+        // Label dan field input
+        JLabel labelNIM = new JLabel("NIM:");
+        labelNIM.setBounds(50, 60, 100, 30);
+        labelNIM.setForeground(Color.WHITE);
+        labelNIM.setFont(LABEL);
+        Panel.add(labelNIM);
 
-    RoundTextField inputNIM = new RoundTextField(15);
-    inputNIM.setBounds(150, 60, 250, 30);
-    Panel.add(inputNIM);
+        RoundTextField inputNIM = new RoundTextField(15);
+        inputNIM.setBounds(150, 60, 250, 30);
+        Panel.add(inputNIM);
 
-    JLabel labelKode = new JLabel("Kode Buku:");
-    labelKode.setBounds(50, 100, 100, 30);
-    labelKode.setForeground(Color.WHITE);
-    labelKode.setFont(LABEL);
-    Panel.add(labelKode);
+        JLabel labelKode = new JLabel("Kode Buku:");
+        labelKode.setBounds(50, 100, 100, 30);
+        labelKode.setForeground(Color.WHITE);
+        labelKode.setFont(LABEL);
+        Panel.add(labelKode);
 
-    RoundTextField inputKode = new RoundTextField(15);
-    inputKode.setBounds(150, 100, 250, 30);
-    Panel.add(inputKode);
+        RoundTextField inputKode = new RoundTextField(15);
+        inputKode.setBounds(150, 100, 250, 30);
+        Panel.add(inputKode);
 
-    JLabel labelJudul = new JLabel("Judul Buku:");
-    labelJudul.setBounds(50, 140, 100, 30);
-    labelJudul.setForeground(Color.WHITE);
-    labelJudul.setFont(LABEL);
-    Panel.add(labelJudul);
+        JLabel labelJudul = new JLabel("Judul Buku:");
+        labelJudul.setBounds(50, 140, 100, 30);
+        labelJudul.setForeground(Color.WHITE);
+        labelJudul.setFont(LABEL);
+        Panel.add(labelJudul);
 
-    RoundTextField inputJudul = new RoundTextField(15);
-    inputJudul.setBounds(150, 140, 250, 30);
-    Panel.add(inputJudul);
+        RoundTextField inputJudul = new RoundTextField(15);
+        inputJudul.setBounds(150, 140, 250, 30);
+        Panel.add(inputJudul);
 
-    JLabel labelStatus = new JLabel("Status:");
-    labelStatus.setBounds(50, 180, 100, 30);
-    labelStatus.setForeground(Color.WHITE);
-    labelStatus.setFont(LABEL);
-    Panel.add(labelStatus);
+        JLabel labelStatus = new JLabel("Status:");
+        labelStatus.setBounds(50, 180, 100, 30);
+        labelStatus.setForeground(Color.WHITE);
+        labelStatus.setFont(LABEL);
+        Panel.add(labelStatus);
 
-    JComboBox<String> inputStatus = new JComboBox<>(new String[] {"Borrowed", "Free"});
-    inputStatus.setFont(COMBOBOX_FONT);
-    inputStatus.setBounds(150, 180, 250, 30);
-    Panel.add(inputStatus);
+        JComboBox<String> inputStatus = new JComboBox<>(new String[] {"Borrowed", "Free"});
+        inputStatus.setFont(COMBOBOX_FONT);
+        inputStatus.setBounds(150, 180, 250, 30);
+        Panel.add(inputStatus);
 
-    // Tabel & ScrollPane
-    String[] columns = {"Kode Buku", "Judul", "Status", "NIM"};
-    DefaultTableModel tableModel = new DefaultTableModel(columns, 0);
-    JTable table = new JTable(tableModel);
-    table.setRowHeight(25);
-    table.getTableHeader().setFont(TABLE_HEADER_FONT);
-    table.getTableHeader().setBackground(new Color(95, 158, 160));
-    table.getTableHeader().setForeground(Color.WHITE);
+        // Tabel & ScrollPane
+        String[] columns = {"Kode Buku", "Judul", "Status", "NIM"};
+        DefaultTableModel tableModel = new DefaultTableModel(columns, 0);
+        JTable table = new JTable(tableModel);
+        table.setRowHeight(25);
+        table.getTableHeader().setFont(TABLE_HEADER_FONT);
+        table.getTableHeader().setBackground(new Color(95, 158, 160));
+        table.getTableHeader().setForeground(Color.WHITE);
 
-    JScrollPane scrollPane = new JScrollPane(table);
-    scrollPane.setBounds(50, 240, 750, 150);
-    Panel.add(scrollPane);
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setBounds(50, 240, 750, 150);
+        Panel.add(scrollPane);
 
-    // Tombol Update
-    RoundButton btnUpdate = new RoundButton("Update", LIGHT_AZURE, SEAFOAM_GREEN);
-    btnUpdate.setBounds(450, 100, 150, 40);
-    Panel.add(btnUpdate);
+        // Tombol Update
+        RoundButton btnUpdate = new RoundButton("Update", LIGHT_AZURE, SEAFOAM_GREEN);
+        btnUpdate.setBounds(450, 100, 150, 40);
+        Panel.add(btnUpdate);
 
-    JLabel alert = new JLabel("");
-    alert.setBounds(450, 150, 350, 30);
-    alert.setFont(ALERT);
-    alert.setForeground(Color.YELLOW);
-    Panel.add(alert);
+        JLabel alert = new JLabel("");
+        alert.setBounds(450, 150, 350, 30);
+        alert.setFont(ALERT);
+        alert.setForeground(Color.YELLOW);
+        Panel.add(alert);
 
-    // Dummy data
-    tableModel.addRow(new Object[] {"KB001", "Pemrograman Java", "Borrowed", "12345"});
-    tableModel.addRow(new Object[] {"KB002", "Struktur Data", "Free", "67890"});
+        // Data dummy
+        tableModel.addRow(new Object[] {"KB001", "Pemrograman Java", "Borrowed", "12345"});
+        tableModel.addRow(new Object[] {"KB002", "Struktur Data", "Free", "67890"});
 
-    // Aksi klik baris
-    table.getSelectionModel().addListSelectionListener(e -> {
-        int row = table.getSelectedRow();
-        if (row != -1) {
-            inputKode.setText(tableModel.getValueAt(row, 0).toString());
-            inputJudul.setText(tableModel.getValueAt(row, 1).toString());
-            inputStatus.setSelectedItem(tableModel.getValueAt(row, 2).toString());
-            inputNIM.setText(tableModel.getValueAt(row, 3).toString());
-        }
-    });
-
-    // Aksi tombol Update
-    btnUpdate.addActionListener(e -> {
-        int selectedRow = table.getSelectedRow();
-        if (selectedRow != -1) {
-            String kode = inputKode.getText();
-            String judul = inputJudul.getText();
-            String status = (String) inputStatus.getSelectedItem();
-            String nim = inputNIM.getText();
-
-            if (!kode.isEmpty() && !judul.isEmpty() && !nim.isEmpty()) {
-                tableModel.setValueAt(kode, selectedRow, 0);
-                tableModel.setValueAt(judul, selectedRow, 1);
-                tableModel.setValueAt(status, selectedRow, 2);
-                tableModel.setValueAt(nim, selectedRow, 3);
-                alert.setText("Data berhasil diperbarui!");
-            } else {
-                alert.setText("Field tidak boleh kosong!");
-            }
-        } else {
-            alert.setText("Pilih data yang ingin diperbarui!");
-        }
-    });
-
-    return Panel;
-
+        return Panel;
     }
 
     
