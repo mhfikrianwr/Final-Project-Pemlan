@@ -8,8 +8,13 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
@@ -22,12 +27,6 @@ import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
-<<<<<<< HEAD
-=======
-
-import java.time.LocalDate;
-
->>>>>>> 71cb8f66d17dc8bdb7e0d095ee031b5172806b57
 public class AdminFrame extends JFrame {
     // Atribut warna
     private Color BREAKER_BAY = new Color(95, 158, 160);
@@ -154,7 +153,7 @@ public class AdminFrame extends JFrame {
         Panel.add(Field_Kode);
         
         // Label dan field untuk Nama Buku
-        JLabel Nama_Buku = new JLabel("Tanggal Pinjam:");
+        JLabel Nama_Buku = new JLabel("Nama Byky:");
         Nama_Buku.setForeground(Color.WHITE);
         Nama_Buku.setFont(LABEL);
         Nama_Buku.setBounds(50, 230, 200, 70);
@@ -164,18 +163,73 @@ public class AdminFrame extends JFrame {
         Field_Nama.setBounds(50, 280, 530, 40);
         Panel.add(Field_Nama);
 
-        // Label alert untuk error logic
-        JLabel Alert = new JLabel("CUSTOM ERROR HERE (IF NOT ERROR, SET BLANK)");
-        Alert.setForeground(Color.RED);
-        Alert.setFont(ALERT);
-        Alert.setBounds(50, 325, 530, 40);
-        Panel.add(Alert);
-
         // Tombol Pinjam
         RoundButton Button = new RoundButton("Pinjam", LIGHT_AZURE, SEAFOAM_GREEN);
         Button.setBounds(50, 370, 530, 70);
         Panel.add(Button);
 
+        // ambil semua data dari text field
+        JLabel Alert = new JLabel();
+        Alert.setForeground(Color.RED);
+        Alert.setFont(ALERT);
+        Alert.setBounds(50, 325, 530, 40);
+        Panel.add(Alert);
+        Button.addActionListener(e ->{
+            String input_nim = Field_NIM.getText();
+            String input_kode = Field_Kode.getText();
+            String input_nama = Field_Nama.getText();
+            try {
+                BufferedReader reader = new BufferedReader(new FileReader("data/buku.txt"));
+                String lines;
+                boolean book_exist = false;
+                boolean book_available = true;
+                while ((lines = reader.readLine()) != null) {
+                    String[] kolom = lines.trim().split(" ");
+                    if(kolom[0].equals(input_kode)){
+                        book_exist = true;
+                        if(kolom[2].equalsIgnoreCase("Dipinjam")) book_available = false;
+                        break;
+                        
+                    }
+                }
+                if(!book_exist) throw new IOException("Buku tidak ditemukan !!");
+                else if(!book_available) throw new IOException("Buku sudah dipinjam !!");
+                else{
+                    // Baca semua baris lagi
+                    File file = new File("data/buku.txt");
+                    List<String> semuaBaris = new ArrayList();
+
+                    BufferedReader reader2 = new BufferedReader(new FileReader(file));
+                    String line;
+                    while((line = reader2.readLine())!=null){
+                        String[] kolom = line.trim().split(" ");
+                        if(kolom[0].equals(input_kode)){
+                            kolom[2] = "Dipinjam";
+                            kolom[3] = input_nim;
+                            line = String.join(" ", kolom);
+                        
+                        }
+                        semuaBaris.add(line);
+                    }
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+                    for(String updateLine : semuaBaris){
+                        writer.write(updateLine);
+                        writer.newLine();
+                    }
+                    writer.close();
+                    Alert.setText("Berhasil Dipinjam");
+                    Alert.setForeground(Color.GREEN);
+                    Panel.revalidate();
+                    Panel.repaint();
+                }
+
+            } catch (IOException ex) {
+                Alert.setText(ex.getMessage());
+                Alert.setForeground(Color.RED);
+                Panel.revalidate();
+                Panel.repaint();
+            }
+        });
         return Panel;
     }
 
@@ -207,7 +261,6 @@ public class AdminFrame extends JFrame {
         Panel.add(Top_Panel, BorderLayout.NORTH); // Menambahkan panel di bagian atas
         Panel.add(Scroll_Pane, BorderLayout.CENTER); // Menambahkan JScrollPane di tengah
         
-<<<<<<< HEAD
         // Ambil data buku dari File
         try{
             BufferedReader reader = new BufferedReader(new FileReader("data/buku.txt"));
@@ -219,13 +272,8 @@ public class AdminFrame extends JFrame {
             }
         } catch(IOException e){
             System.out.println(e.getMessage());
-=======
-        // Data dummy
-        for (int i = 0; i < 16; i++) {
-            Object[] row = {"Kode" + i, "Judul" + i, i % 2 == 0? "Borrowed" : "Free", "2025-06-15", "2025-06-22", "NIM" + i};
-            Table_Model.addRow(row);
->>>>>>> 71cb8f66d17dc8bdb7e0d095ee031b5172806b57
         }
+
         Sort.addActionListener(e -> {
             int index = Sort.getSelectedIndex();
             Sorter.setSortKeys(List.of(new RowSorter.SortKey(index, SortOrder.ASCENDING)));
@@ -326,7 +374,6 @@ public class AdminFrame extends JFrame {
         Panel.add(btnUpdate);
 
         // Data dummy
-<<<<<<< HEAD
         try {
             BufferedReader reader = new BufferedReader(new FileReader("data/buku.txt"));
             String lines;
@@ -337,11 +384,6 @@ public class AdminFrame extends JFrame {
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());
-=======
-        for (int i = 0; i < 16; i++) {
-            Object[] row = {"Kode" + i, "Judul" + i, i % 2 == 0? "Borrowed" : "Free", "2025-06-15", "2025-06-22", "NIM" + i};
-            Table_Model.addRow(row);
->>>>>>> 71cb8f66d17dc8bdb7e0d095ee031b5172806b57
         }
 
         return Panel;
