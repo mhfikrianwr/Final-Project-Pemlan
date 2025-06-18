@@ -447,63 +447,125 @@ public class AdminFrame extends JFrame {
     }
 
     private JPanel Create_Panel_Four() {
-        // Buat panel untuk peminjaman buku
+        // Buat panel untuk mengembalikan buku
         JPanel Panel = new JPanel();
         Panel.setLayout(null);
         Panel.setBackground(DEEP_DARK_BLUE);
         Panel.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
-        
+
         // Teks awal
         JLabel Title = new JLabel("Form Pengembalian Buku");
         Title.setForeground(Color.WHITE);
         Title.setFont(TITLE_LABEL);
-        Title.setBounds(155, 40, 400, 30);
+        Title.setBounds(165, 40, 400, 30);
         Panel.add(Title);
-        
+
         // Label dan field untuk NIM
         JLabel Label_NIM = new JLabel("NIM:");
         Label_NIM.setForeground(Color.WHITE);
         Label_NIM.setFont(LABEL);
-        Label_NIM.setBounds(50, 70, 100,70);
+        Label_NIM.setBounds(50, 70, 100, 70);
         Panel.add(Label_NIM);
-        
+
         RoundTextField Field_NIM = new RoundTextField(15);
         Field_NIM.setBounds(50, 120, 530, 40);
         Panel.add(Field_NIM);
-        
+
         // Label dan field untuk Kode Buku
         JLabel Label_Kode = new JLabel("Kode Buku:");
         Label_Kode.setForeground(Color.WHITE);
         Label_Kode.setFont(LABEL);
         Label_Kode.setBounds(50, 150, 100, 70);
         Panel.add(Label_Kode);
-        
+
         RoundTextField Field_Kode = new RoundTextField(100);
         Field_Kode.setBounds(50, 200, 530, 40);
         Panel.add(Field_Kode);
-        
+
         // Label dan field untuk Nama Buku
         JLabel Nama_Buku = new JLabel("Nama Buku:");
         Nama_Buku.setForeground(Color.WHITE);
         Nama_Buku.setFont(LABEL);
-        Nama_Buku.setBounds(50, 230, 100, 70);
+        Nama_Buku.setBounds(50, 230, 200, 70);
         Panel.add(Nama_Buku);
-        
+
         RoundTextField Field_Nama = new RoundTextField(100);
         Field_Nama.setBounds(50, 280, 530, 40);
         Panel.add(Field_Nama);
 
-        // Label alert untuk error logic
-        JLabel Alert = new JLabel("CUSTOM ERROR HERE (IF NOT ERROR, SET BLANK)");
+        // Tombol Pinjam
+        RoundButton Button = new RoundButton("Kembalikan", LIGHT_AZURE, SEAFOAM_GREEN);
+        Button.setBounds(50, 370, 530, 70);
+        Panel.add(Button);
+
+        // ambil semua data dari text field
+        JLabel Alert = new JLabel();
         Alert.setForeground(Color.RED);
         Alert.setFont(ALERT);
         Alert.setBounds(50, 325, 530, 40);
         Panel.add(Alert);
+        Button.addActionListener(e -> {
+            String input_nim = Field_NIM.getText();
+            String input_kode = Field_Kode.getText();
+            String input_nama = Field_Nama.getText();
+            try {
+                BufferedReader reader = new BufferedReader(new FileReader("data/buku.txt"));
+                String lines;
+                boolean book_exist = false;
+                boolean book_Borrowed = true;
+                while ((lines = reader.readLine()) != null) {
+                    String[] kolom = lines.trim().split(" ");
+                    if (kolom[0].equals(input_kode)) {
+                        book_exist = true;
+                        if (kolom[2].equalsIgnoreCase("Tersedia"))
+                            book_Borrowed = false;
+                        else if(!kolom[3].equalsIgnoreCase(Field_NIM.getText())){
+                           book_Borrowed = false;
+                        }
+                        break;
+                    }
+                }
+                if (!book_exist)
+                    throw new IOException("Buku tidak ditemukan !!");
+                else if (!book_Borrowed)
+                    throw new IOException("Mahasiswa Tersebut tidak meminjam buku tersebut !!");
+                else {
+                    // Baca semua baris lagi
+                    File file = new File("data/buku.txt");
+                    List<String> semuaBaris = new ArrayList();
 
-        // Tombol Pinjam
-        RoundButton Button = new RoundButton("Kembali", LIGHT_AZURE, SEAFOAM_GREEN);
-        Button.setBounds(50, 370, 530, 70);
-        Panel.add(Button);
+                    BufferedReader reader2 = new BufferedReader(new FileReader(file));
+                    String line;
+                    while ((line = reader2.readLine()) != null) {
+                        String[] kolom = line.trim().split(" ");
+                        if (kolom[0].equals(input_kode)) {
+                            kolom[2] = "Tersedia";
+                            kolom[3] = "-";
+                            line = String.join(" ", kolom);
+
+                        }
+                        semuaBaris.add(line);
+                    }
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+                    for (String updateLine : semuaBaris) {
+                        writer.write(updateLine);
+                        writer.newLine();
+                    }
+                    writer.close();
+                    Alert.setText("Berhasil Dikembalikan");
+                    Alert.setForeground(Color.GREEN);
+                    loadTableDataBuku();
+                    Panel.revalidate();
+                    Panel.repaint();
+                }
+
+            } catch (IOException ex) {
+                Alert.setText(ex.getMessage());
+                Alert.setForeground(Color.RED);
+                Panel.revalidate();
+                Panel.repaint();
+            }
+        });
         return Panel;
     }
 }
