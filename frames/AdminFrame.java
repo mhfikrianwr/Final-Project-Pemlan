@@ -26,8 +26,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.RowFilter;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 public class AdminFrame extends JFrame {
@@ -279,44 +283,69 @@ public class AdminFrame extends JFrame {
     }
 
     
-    private JPanel Create_Panel_Two() {
-        JPanel Panel = new JPanel(new BorderLayout(10, 10));
-        Panel.setBackground(DEEP_DARK_BLUE);
-        Panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Menambahkan padding
-        
-        String[] Columns = {"Kode Buku", "Judul", "Status", "Nim", "Tanggal Pinjam"};
-        String[] Search = {"Kode Buku", "Judul", "Tanggal Pinjam", "NIM"};
-        
-        JComboBox<String> Sort = new JComboBox<>(Search);
-        Sort.setFont(COMBOBOX_FONT); // Mengatur font JComboBox
-        Table_Model = new DefaultTableModel(Columns, 0);
-        Table = new JTable(Table_Model);
-        Table.setRowHeight(25); // Mengatur tinggi baris
-        Table.getTableHeader().setFont(TABLE_HEADER_FONT); // Mengatur font header tabel
-        Table.getTableHeader().setBackground(BREAKER_BAY); // Mengatur warna latar belakang header
-        Table.getTableHeader().setForeground(Color.WHITE); // Mengatur warna teks header
-        TableRowSorter<DefaultTableModel> Sorter = new TableRowSorter<>(Table_Model);
-        JScrollPane Scroll_Pane = new JScrollPane(Table);
-        Table.setRowSorter(Sorter);
-        
-        // Menambahkan komponen ke panel
-        JPanel Top_Panel = new JPanel(new FlowLayout(FlowLayout.RIGHT)); // Panel untuk JComboBox
-        Top_Panel.add(Sort);
-        Top_Panel.setBackground(DEEP_DARK_BLUE);
+private JPanel Create_Panel_Two() {
+    JPanel Panel = new JPanel(new BorderLayout(10, 10));
+    Panel.setBackground(DEEP_DARK_BLUE);
+    Panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Padding
 
+    String[] Columns = {"Kode Buku", "Judul", "Status", "Nim", "Tanggal Pinjam"};
+    String[] Search = {"Kode Buku", "Judul", "Tanggal Pinjam", "NIM"};
 
-        loadTableDataBuku();
+    JComboBox<String> Sort = new JComboBox<>(Search);
+    Sort.setFont(COMBOBOX_FONT);
 
-        Panel.add(Top_Panel, BorderLayout.NORTH); // Menambahkan panel di bagian atas
-        Panel.add(Scroll_Pane, BorderLayout.CENTER); // Menambahkan JScrollPane di tengah
-        
-        Sort.addActionListener(e -> {
-            int index = Sort.getSelectedIndex();
-            Sorter.setSortKeys(List.of(new RowSorter.SortKey(index, SortOrder.ASCENDING)));
-        });
-        
-        return Panel;
-    }
+    JTextField SearchField = new JTextField(15);
+    SearchField.setFont(LABEL);
+    SearchField.setToolTipText("Cari berdasarkan Kode Buku");
+
+    Table_Model = new DefaultTableModel(Columns, 0);
+    Table = new JTable(Table_Model);
+    Table.setRowHeight(25);
+    Table.getTableHeader().setFont(TABLE_HEADER_FONT);
+    Table.getTableHeader().setBackground(BREAKER_BAY);
+    Table.getTableHeader().setForeground(Color.WHITE);
+
+    TableRowSorter<DefaultTableModel> Sorter = new TableRowSorter<>(Table_Model);
+    Table.setRowSorter(Sorter);
+    JScrollPane Scroll_Pane = new JScrollPane(Table);
+
+    // Panel atas dengan search dan sort
+    JPanel Top_Panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+    Top_Panel.setBackground(DEEP_DARK_BLUE);
+    Top_Panel.add(new JLabel("Search:"));
+    Top_Panel.add(SearchField);
+    Top_Panel.add(Sort);
+
+    // Listener pencarian
+    SearchField.getDocument().addDocumentListener(new DocumentListener() {
+        public void insertUpdate(DocumentEvent e) { filter(); }
+        public void removeUpdate(DocumentEvent e) { filter(); }
+        public void changedUpdate(DocumentEvent e) { filter(); }
+
+        private void filter() {
+            String text = SearchField.getText();
+            if (text.trim().length() == 0) {
+                Sorter.setRowFilter(null);
+            } else {
+                Sorter.setRowFilter(RowFilter.regexFilter("(?i)^" + text, 0)); // kolom ke-0 = Kode Buku
+            }
+        }
+    });
+
+    // Listener sort dari JComboBox
+    Sort.addActionListener(e -> {
+        int index = Sort.getSelectedIndex();
+        Sorter.setSortKeys(List.of(new RowSorter.SortKey(index, SortOrder.ASCENDING)));
+    });
+
+    loadTableDataBuku();
+
+    Panel.add(Top_Panel, BorderLayout.NORTH);
+    Panel.add(Scroll_Pane, BorderLayout.CENTER);
+
+    return Panel;
+}
+
 
     private JPanel Create_Panel_Three() {
         JPanel Panel = new JPanel(null);
