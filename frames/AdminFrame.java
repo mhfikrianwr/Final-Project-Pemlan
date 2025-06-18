@@ -50,7 +50,7 @@ public class AdminFrame extends JFrame {
     // Atribut untuk switch panel
     private String PANEL_ONE = "Peminjaman Buku";
     private String PANEL_TWO = "List Buku Pinjaman";
-    private String PANEL_THREE = "Update Peminjaman";
+    private String PANEL_THREE = "Update Mahasiswa";
     private String PANEL_FOUR = "Pengembalian Buku";
 
     // Teks awalan
