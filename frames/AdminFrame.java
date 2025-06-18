@@ -57,6 +57,10 @@ public class AdminFrame extends JFrame {
     private DefaultTableModel Table_Model;
     private JTable Table; // jika kamu ingin mengakses Table juga
 
+    // Table untuk mahasiswa 
+    private DefaultTableModel Table_Model1;
+    private JTable Table1;
+
     public AdminFrame() {
         // Title Dari aplikasi GUI
         this.setTitle("Admin");
@@ -223,7 +227,7 @@ public class AdminFrame extends JFrame {
                     writer.close();
                     Alert.setText("Berhasil Dipinjam");
                     Alert.setForeground(Color.GREEN);
-                    loadTableData();
+                    loadTableDataBuku();
                     Panel.revalidate();
                     Panel.repaint();
                 }
@@ -238,7 +242,7 @@ public class AdminFrame extends JFrame {
         return Panel;
     }
     
-    private void loadTableData() {
+    private void loadTableDataBuku() {
         Table_Model.setRowCount(0); // Bersihkan semua baris
         try (BufferedReader reader = new BufferedReader(new FileReader("data/buku.txt"))) {
             String line;
@@ -249,6 +253,23 @@ public class AdminFrame extends JFrame {
                     row[i] = kolom[i];
                 }
                 Table_Model.addRow(row);
+            }
+        } catch (IOException e) {
+            System.out.println("Gagal memuat data: " + e.getMessage());
+        }
+    }
+    
+    private void loadTableDataMahasiswa() {
+        Table_Model1.setRowCount(0); // Bersihkan semua baris
+        try (BufferedReader reader = new BufferedReader(new FileReader("data/Mahasiswa.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] kolom = line.trim().split(" ");
+                Object[] row = new Object[4];
+                for (int i = 0; i < kolom.length && i < 4; i++) {
+                    row[i] = kolom[i];
+                }
+                Table_Model1.addRow(row);
             }
         } catch (IOException e) {
             System.out.println("Gagal memuat data: " + e.getMessage());
@@ -281,7 +302,7 @@ public class AdminFrame extends JFrame {
         Top_Panel.setBackground(DEEP_DARK_BLUE);
 
 
-        loadTableData();
+        loadTableDataBuku();
 
         Panel.add(Top_Panel, BorderLayout.NORTH); // Menambahkan panel di bagian atas
         Panel.add(Scroll_Pane, BorderLayout.CENTER); // Menambahkan JScrollPane di tengah
@@ -299,7 +320,7 @@ public class AdminFrame extends JFrame {
         Panel.setBackground(DEEP_DARK_BLUE);
         Panel.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
 
-        JLabel Title = new JLabel("Update Data Peminjaman Buku");
+        JLabel Title = new JLabel("Tambahkan / Update Mahasiswa");
         Title.setFont(TITLE_LABEL);
         Title.setForeground(Color.WHITE);
         Title.setBounds(115, 20, 500, 30);
@@ -317,87 +338,111 @@ public class AdminFrame extends JFrame {
         Panel.add(Input_NIM);
 
         // Label dan field input untuk Kode Buku
-        JLabel Label_Kode = new JLabel("Kode Buku:");
-        Label_Kode.setBounds(50, 100, 100, 30);
-        Label_Kode.setForeground(Color.WHITE);
-        Label_Kode.setFont(LABEL);
-        Panel.add(Label_Kode);
+        JLabel Label_Nama = new JLabel("Nama :");
+        Label_Nama.setBounds(50, 100, 100, 30);
+        Label_Nama.setForeground(Color.WHITE);
+        Label_Nama.setFont(LABEL);
+        Panel.add(Label_Nama);
 
-        RoundTextField Input_Kode = new RoundTextField(15);
-        Input_Kode.setBounds(150, 100, 250, 30);
-        Panel.add(Input_Kode);
+        RoundTextField Input_Nama = new RoundTextField(15);
+        Input_Nama.setBounds(150, 100, 250, 30);
+        Panel.add(Input_Nama);
 
         // Label dan field input untuk Judul Buku
-        JLabel Label_Judul = new JLabel("Judul Buku:");
-        Label_Judul.setBounds(50, 140, 100, 30);
-        Label_Judul.setForeground(Color.WHITE);
-        Label_Judul.setFont(LABEL);
-        Panel.add(Label_Judul);
+        JLabel Label_Prodi = new JLabel("Prodi:");
+        Label_Prodi.setBounds(50, 140, 100, 30);
+        Label_Prodi.setForeground(Color.WHITE);
+        Label_Prodi.setFont(LABEL);
+        Panel.add(Label_Prodi);
 
-        RoundTextField Input_Judul = new RoundTextField(15);
-        Input_Judul.setBounds(150, 140, 250, 30);
-        Panel.add(Input_Judul);
+        RoundTextField Input_Prodi = new RoundTextField(15);
+        Input_Prodi.setBounds(150, 140, 250, 30);
+        Panel.add(Input_Prodi);
 
         // Label dan field input untuk Tanggal Pinjam
-        JLabel Label_Tanggal_Pinjam = new JLabel("Tgl Pinjam:");
-        Label_Tanggal_Pinjam.setBounds(50, 180, 100, 30);
-        Label_Tanggal_Pinjam.setForeground(Color.WHITE);
-        Label_Tanggal_Pinjam.setFont(LABEL);
-        Panel.add(Label_Tanggal_Pinjam);
+        JLabel Label_Angkatan = new JLabel("Angkatan:");
+        Label_Angkatan.setBounds(50, 180, 100, 30);
+        Label_Angkatan.setForeground(Color.WHITE);
+        Label_Angkatan.setFont(LABEL);
+        Panel.add(Label_Angkatan);
 
-        RoundTextField Input_Tanggal_Pinjam = new RoundTextField(15);
-        Input_Tanggal_Pinjam.setBounds(150, 180, 250, 30);
-        Panel.add(Input_Tanggal_Pinjam);
+        RoundTextField Input_Angkatan = new RoundTextField(15);
+        Input_Angkatan.setBounds(150, 180, 250, 30);
+        Panel.add(Input_Angkatan);
 
-        JLabel Label_Status = new JLabel("Status:");
-        Label_Status.setBounds(50, 220, 100, 30);
-        Label_Status.setForeground(Color.WHITE);
-        Label_Status.setFont(LABEL);
-        Panel.add(Label_Status);
 
-        JComboBox<String> Input_Status = new JComboBox<>(new String[] {"Borrowed", "Free"});
-        Input_Status.setFont(COMBOBOX_FONT);
-        Input_Status.setBounds(150, 220, 250, 30);
-        Panel.add(Input_Status);
 
         // Tabel & ScrollPane
-        String[] columns = {"Kode Buku", "Judul", "Status", "Tanggal Pinjam", "Tanggal Kembali", "NIM"};
-        DefaultTableModel Table_Model = new DefaultTableModel(columns, 0);
-        JTable table = new JTable(Table_Model);
-        table.setRowHeight(25);
-        table.getTableHeader().setFont(TABLE_HEADER_FONT);
-        table.getTableHeader().setBackground(BREAKER_BAY);
-        table.getTableHeader().setForeground(Color.WHITE);
+        String[] columns = {"Nim", "Nama", "Angkatan", "Prodi"};
+        Table_Model1 = new DefaultTableModel(columns, 0);
+        Table1 = new JTable(Table_Model1);
+        Table1.setRowHeight(25);
+        Table1.getTableHeader().setFont(TABLE_HEADER_FONT);
+        Table1.getTableHeader().setBackground(BREAKER_BAY);
+        Table1.getTableHeader().setForeground(Color.WHITE);
 
-        JScrollPane Scroll_Pane = new JScrollPane(table);
+        JScrollPane Scroll_Pane = new JScrollPane(Table1);
         Scroll_Pane.setBounds(50, 260, 525, 150);
         Panel.add(Scroll_Pane);
 
+
+        loadTableDataMahasiswa();
+        // Tombol Update
+        RoundButton btnUpdate = new RoundButton("Update / Tambahkan", LIGHT_AZURE, SEAFOAM_GREEN);
+        btnUpdate.setBounds(420, 60, 150, 30);
+        Panel.add(btnUpdate);
+
         // Alert message
-        JLabel Alert = new JLabel("CUSTOM ERROR HERE (IF NOT ERROR, SET BLANK)");
+        JLabel Alert = new JLabel();
         Alert.setBounds(50, 420, 530, 30);
         Alert.setFont(ALERT);
         Alert.setForeground(Color.RED);
         Panel.add(Alert);
 
-        // Tombol Update
-        RoundButton btnUpdate = new RoundButton("Update", LIGHT_AZURE, SEAFOAM_GREEN);
-        btnUpdate.setBounds(450, 130, 150, 40);
-        Panel.add(btnUpdate);
+        btnUpdate.addActionListener(e ->{
+            try {
+                File file = new File("data/Mahasiswa.txt");
+                List<String> semuaBaris = new ArrayList();
+                BufferedReader reader = new BufferedReader(new FileReader(file));
+                String line;
+                boolean exist = false;
+                if (Input_NIM.getText().isEmpty() || Input_Nama.getText().isEmpty() || Input_Prodi.getText().isEmpty() || Input_Angkatan.getText().isEmpty())
+                    throw new IOException("Field Tidak boleh kosong!!!");
+                while ((line = reader.readLine()) != null) {
+                    String[] kolom = line.trim().split(" ");
+                    if(kolom[0].equalsIgnoreCase(Input_NIM.getText())){
+                        kolom[1] = Input_Nama.getText();
+                        kolom[2] = Input_Angkatan.getText();
+                        kolom[3] = Input_Prodi.getText();
+                        line = String.join(" ",kolom);
+                        exist = true;
+                    }
+                    semuaBaris.add(line);
+                }
+                if(!exist){
+                    String[] kolom = {Input_NIM.getText(),Input_Nama.getText(),Input_Angkatan.getText(),Input_Prodi.getText()};
+                    line = String.join(" ",kolom);
+                    semuaBaris.add(line);
+                }
+                BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+                for(String updateLine : semuaBaris){
+                    writer.write(updateLine);
+                    writer.newLine();
+                }
+                writer.close();
+                Alert.setText("Update Berhasil!!!");
+                Alert.setForeground(Color.GREEN);
+                loadTableDataMahasiswa();
+                Panel.revalidate();
+                Panel.repaint();
 
-        // Data dummy
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader("data/buku.txt"));
-            String lines;
-            while ((lines = reader.readLine()) != null) {
-                String[] kolom = lines.trim().split(" ");
-                Object[] row = { kolom[0], kolom[1], kolom[2], kolom[3] };
-                Table_Model.addRow(row);
+            } catch (IOException ex) {
+                Alert.setText(ex.getMessage());
+                Alert.setForeground(Color.RED);
+                Panel.revalidate();
+                Panel.repaint();
             }
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-
+        });
         return Panel;
     }
 
@@ -459,7 +504,6 @@ public class AdminFrame extends JFrame {
         RoundButton Button = new RoundButton("Kembali", LIGHT_AZURE, SEAFOAM_GREEN);
         Button.setBounds(50, 370, 530, 70);
         Panel.add(Button);
-
         return Panel;
     }
 }
