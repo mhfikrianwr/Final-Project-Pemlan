@@ -14,6 +14,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BorderFactory;
@@ -60,6 +63,11 @@ public class AdminFrame extends JFrame {
     // Table untuk mahasiswa 
     private DefaultTableModel Table_Model1;
     private JTable Table1;
+
+    // Variabel waktu peminjaman
+    LocalDateTime Tgl_Pinjam ;
+    DateTimeFormatter formatter ;
+    String date;
 
     public AdminFrame() {
         // Title Dari aplikasi GUI
@@ -160,16 +168,7 @@ public class AdminFrame extends JFrame {
         Field_Kode.setBounds(50, 200, 530, 40);
         Panel.add(Field_Kode);
         
-        // Label dan field untuk Nama Buku
-        JLabel Nama_Buku = new JLabel("Nama Byky:");
-        Nama_Buku.setForeground(Color.WHITE);
-        Nama_Buku.setFont(LABEL);
-        Nama_Buku.setBounds(50, 230, 200, 70);
-        Panel.add(Nama_Buku);
-        
-        RoundTextField Field_Nama = new RoundTextField(100);
-        Field_Nama.setBounds(50, 280, 530, 40);
-        Panel.add(Field_Nama);
+
 
         // Tombol Pinjam
         RoundButton Button = new RoundButton("Pinjam", LIGHT_AZURE, SEAFOAM_GREEN);
@@ -185,8 +184,10 @@ public class AdminFrame extends JFrame {
         Button.addActionListener(e ->{
             String input_nim = Field_NIM.getText();
             String input_kode = Field_Kode.getText();
-            String input_nama = Field_Nama.getText();
             try {
+                Tgl_Pinjam = LocalDateTime.now();
+                formatter = DateTimeFormatter.ofPattern("dd-MM-YY");
+                date = Tgl_Pinjam.format(formatter);
                 BufferedReader reader = new BufferedReader(new FileReader("data/buku.txt"));
                 String lines;
                 boolean book_exist = false;
@@ -214,6 +215,7 @@ public class AdminFrame extends JFrame {
                         if(kolom[0].equals(input_kode)){
                             kolom[2] = "Dipinjam";
                             kolom[3] = input_nim;
+                            kolom[4] = date;
                             line = String.join(" ", kolom);
                         
                         }
@@ -275,14 +277,15 @@ public class AdminFrame extends JFrame {
             System.out.println("Gagal memuat data: " + e.getMessage());
         }
     }
+
     
     private JPanel Create_Panel_Two() {
         JPanel Panel = new JPanel(new BorderLayout(10, 10));
         Panel.setBackground(DEEP_DARK_BLUE);
         Panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Menambahkan padding
         
-        String[] Columns = {"Kode Buku", "Judul", "Status", "Tanggal Pinjam", "Tanggal Kembali", "NIM"};
-        String[] Search = {"Kode Buku", "Judul", "Tanggal Pinjam", "Tanggal Kembali", "NIM"};
+        String[] Columns = {"Kode Buku", "Judul", "Status", "Nim", "Tanggal Pinjam"};
+        String[] Search = {"Kode Buku", "Judul", "Tanggal Pinjam", "NIM"};
         
         JComboBox<String> Sort = new JComboBox<>(Search);
         Sort.setFont(COMBOBOX_FONT); // Mengatur font JComboBox
@@ -482,17 +485,6 @@ public class AdminFrame extends JFrame {
         Field_Kode.setBounds(50, 200, 530, 40);
         Panel.add(Field_Kode);
 
-        // Label dan field untuk Nama Buku
-        JLabel Nama_Buku = new JLabel("Nama Buku:");
-        Nama_Buku.setForeground(Color.WHITE);
-        Nama_Buku.setFont(LABEL);
-        Nama_Buku.setBounds(50, 230, 200, 70);
-        Panel.add(Nama_Buku);
-
-        RoundTextField Field_Nama = new RoundTextField(100);
-        Field_Nama.setBounds(50, 280, 530, 40);
-        Panel.add(Field_Nama);
-
         // Tombol Pinjam
         RoundButton Button = new RoundButton("Kembalikan", LIGHT_AZURE, SEAFOAM_GREEN);
         Button.setBounds(50, 370, 530, 70);
@@ -507,12 +499,17 @@ public class AdminFrame extends JFrame {
         Button.addActionListener(e -> {
             String input_nim = Field_NIM.getText();
             String input_kode = Field_Kode.getText();
-            String input_nama = Field_Nama.getText();
+            LocalDateTime Tgl_kembali = LocalDateTime.now();
+            formatter = DateTimeFormatter.ofPattern("dd-MM-yy");
+            date = Tgl_kembali.format(formatter);
+            double denda = 0;
             try {
                 BufferedReader reader = new BufferedReader(new FileReader("data/buku.txt"));
                 String lines;
                 boolean book_exist = false;
                 boolean book_Borrowed = true;
+                long totalDays = 0;
+                
                 while ((lines = reader.readLine()) != null) {
                     String[] kolom = lines.trim().split(" ");
                     if (kolom[0].equals(input_kode)) {
@@ -539,10 +536,16 @@ public class AdminFrame extends JFrame {
                     while ((line = reader2.readLine()) != null) {
                         String[] kolom = line.trim().split(" ");
                         if (kolom[0].equals(input_kode)) {
+                            String pinjamString = kolom[4];
+                            LocalDate pinjam = LocalDate.parse(pinjamString, formatter);
+                            totalDays = ChronoUnit.DAYS.between(pinjam, Tgl_kembali);
+                            if (totalDays > 7) {
+                                denda = 10000 * (totalDays - 7);
+                            }
                             kolom[2] = "Tersedia";
                             kolom[3] = "-";
+                            kolom[4] = "-";
                             line = String.join(" ", kolom);
-
                         }
                         semuaBaris.add(line);
                     }
@@ -557,6 +560,7 @@ public class AdminFrame extends JFrame {
                     loadTableDataBuku();
                     Panel.revalidate();
                     Panel.repaint();
+                    if(totalDays > 7) throw new IOException("Telat : " + (totalDays -7) + "\n Denda : Rp." + denda);
                 }
 
             } catch (IOException ex) {
