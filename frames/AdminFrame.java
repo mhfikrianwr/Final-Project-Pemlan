@@ -84,7 +84,7 @@ public class AdminFrame extends JFrame {
         // Tombol
         RoundButton Btn_Panel_One = new RoundButton("Peminjaman Buku", CADET_BLUE, SOFT_BLUE);
         RoundButton Btn_Panel_Two = new RoundButton("List Buku Pinjaman", CADET_BLUE, SOFT_BLUE);
-        RoundButton Btn_Panel_Three = new RoundButton("Update Peminjaman", CADET_BLUE, SOFT_BLUE);
+        RoundButton Btn_Panel_Three = new RoundButton("Update Mahasiswa", CADET_BLUE, SOFT_BLUE);
         RoundButton Btn_Panel_Four = new RoundButton("Pengembalian Buku", CADET_BLUE, SOFT_BLUE);
         RoundButton Btn_Panel_Five = new RoundButton("Kembali ke Menu Utama", CADET_BLUE, SOFT_BLUE);
 
