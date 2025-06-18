@@ -53,6 +53,10 @@ public class AdminFrame extends JFrame {
     // Teks awalan
     private JLabel Upper_Text = new JLabel("Menu Admin");
 
+    // Table untuk buku dan data peminjamannya
+    private DefaultTableModel Table_Model;
+    private JTable Table; // jika kamu ingin mengakses Table juga
+
     public AdminFrame() {
         // Title Dari aplikasi GUI
         this.setTitle("Admin");
@@ -219,6 +223,7 @@ public class AdminFrame extends JFrame {
                     writer.close();
                     Alert.setText("Berhasil Dipinjam");
                     Alert.setForeground(Color.GREEN);
+                    loadTableData();
                     Panel.revalidate();
                     Panel.repaint();
                 }
@@ -232,7 +237,24 @@ public class AdminFrame extends JFrame {
         });
         return Panel;
     }
-
+    
+    private void loadTableData() {
+        Table_Model.setRowCount(0); // Bersihkan semua baris
+        try (BufferedReader reader = new BufferedReader(new FileReader("data/buku.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] kolom = line.trim().split(" ");
+                Object[] row = new Object[6];
+                for (int i = 0; i < kolom.length && i < 6; i++) {
+                    row[i] = kolom[i];
+                }
+                Table_Model.addRow(row);
+            }
+        } catch (IOException e) {
+            System.out.println("Gagal memuat data: " + e.getMessage());
+        }
+    }
+    
     private JPanel Create_Panel_Two() {
         JPanel Panel = new JPanel(new BorderLayout(10, 10));
         Panel.setBackground(DEEP_DARK_BLUE);
@@ -243,8 +265,8 @@ public class AdminFrame extends JFrame {
         
         JComboBox<String> Sort = new JComboBox<>(Search);
         Sort.setFont(COMBOBOX_FONT); // Mengatur font JComboBox
-        DefaultTableModel Table_Model = new DefaultTableModel(Columns, 0);
-        JTable Table = new JTable(Table_Model);
+        Table_Model = new DefaultTableModel(Columns, 0);
+        Table = new JTable(Table_Model);
         Table.setRowHeight(25); // Mengatur tinggi baris
         Table.getTableHeader().setFont(TABLE_HEADER_FONT); // Mengatur font header tabel
         Table.getTableHeader().setBackground(BREAKER_BAY); // Mengatur warna latar belakang header
@@ -258,22 +280,12 @@ public class AdminFrame extends JFrame {
         Top_Panel.add(Sort);
         Top_Panel.setBackground(DEEP_DARK_BLUE);
 
+
+        loadTableData();
+
         Panel.add(Top_Panel, BorderLayout.NORTH); // Menambahkan panel di bagian atas
         Panel.add(Scroll_Pane, BorderLayout.CENTER); // Menambahkan JScrollPane di tengah
         
-        // Ambil data buku dari File
-        try{
-            BufferedReader reader = new BufferedReader(new FileReader("data/buku.txt"));
-            String lines;
-            while((lines = reader.readLine())!= null){
-                String[] kolom = lines.trim().split(" ");
-                Object[] row = {kolom[0], kolom[1], kolom[2], kolom[3]};
-                Table_Model.addRow(row);
-            }
-        } catch(IOException e){
-            System.out.println(e.getMessage());
-        }
-
         Sort.addActionListener(e -> {
             int index = Sort.getSelectedIndex();
             Sorter.setSortKeys(List.of(new RowSorter.SortKey(index, SortOrder.ASCENDING)));
